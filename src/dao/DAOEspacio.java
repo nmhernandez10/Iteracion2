@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import vos.CategoriaServicio;
 import vos.Espacio;
 import vos.Habitacion;
 import vos.Operador;
@@ -274,10 +275,24 @@ public class DAOEspacio {
 				"WHERE FECHAINICIO > TO_DATE('" + rfc4.getFechaMenor() + "','YYYY-MM-DD') AND FECHAINICIO + DURACION < TO_DATE('" + rfc4.getFechaMayor()+"','YYYY-MM-DD') "+
 				"GROUP BY idEspacio))";
 		
-		List<Long> servicios = rfc4.getServicios();
+		List<String> servicios = rfc4.getServicios();
 		
-		for(long idS : servicios)
+		DAOCategoriaServicio daoCatServicio = new DAOCategoriaServicio();
+		daoCatServicio.setConn(conn);
+		
+		for(String idString : servicios)
 		{
+			long idS;
+			try
+			{				
+				CategoriaServicio cat = daoCatServicio.buscarCategoriaServicioNombre(idString);
+				idS = cat.getId();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				throw new Exception("No existe una categoría de servicios con el nombre '" + idString + "'");
+			}
 			sql += " AND SERVICIOS.IDCATEGORIA = " + idS;
 		}
 

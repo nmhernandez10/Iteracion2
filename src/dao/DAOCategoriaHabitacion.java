@@ -93,7 +93,7 @@ public class DAOCategoriaHabitacion
 	}
 
 	public CategoriaHabitacion buscarCategoriaHabitacion(long id) throws SQLException, Exception {
-		String sql = "SELECT * FROM CATEGORIASHABITACION WHERE ID  ='" + id + "'";
+		String sql = "SELECT * FROM CATEGORIASHABITACION WHERE ID  = " + id;
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -103,7 +103,7 @@ public class DAOCategoriaHabitacion
 		
 		if(!rs.next())
 		{
-			return null;
+			throw new Exception("No se encontró ninguna categoría de habitación con el id = "+id);
 		}
 		
 		String categoria = rs.getString("NOMBRE");

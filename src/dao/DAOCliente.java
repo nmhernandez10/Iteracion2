@@ -7,7 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import vos.CategoriaServicio;
 import vos.Cliente;
+import vos.Espacio;
+import vos.RFC5;
+import vos.RFC6;
 import vos.Reserva;
 import vos.Vinculo;
 
@@ -154,5 +158,112 @@ public class DAOCliente {
 		
 		Long idCliente = Long.parseLong(rs.getString("IDCLIENTE"));
 		return buscarCliente(idCliente);
+	}
+	
+	//RFC5
+	
+	public void obtenerUsosPorCategoria(List<RFC5> lista) throws SQLException, Exception
+	{
+		DAOVinculo daoVinculo = new DAOVinculo();
+		daoVinculo.setConn(conn);
+		
+		DAOCategoriaServicio daoCatServicio = new DAOCategoriaServicio();
+		daoCatServicio.setConn(conn);
+		
+		String sql = "SELECT VINCULOS.ID, SUM(RESERVAS.DURACION) AS DIASTOTAL, SUM(RESERVAS.PRECIO) AS DINEROTOTAL "+
+				"FROM CLIENTES, RESERVAS, VINCULOS "+
+				"WHERE CLIENTES.ID = RESERVAS.IDCLIENTE AND CLIENTES.IDVINCULO = VINCULOS.ID "+
+				"GROUP BY VINCULOS.ID "+
+				"ORDER BY VINCULOS.ID ASC";		
+		
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();	
+		
+		while (rs.next()) 
+		{
+			long id = Long.parseLong(rs.getString("ID"));
+			String categoria = daoVinculo.buscarVinculo(id).getVinculo();
+			int diasTotal = Integer.parseInt(rs.getString("DIASTOTAL"));
+			double dineroTotal = Double.parseDouble(rs.getString("DINEROTOTAL"));
+			
+			String sqlC = "SELECT ID, IDCATEGORIA FROM(SELECT DISTINCT VINCULOS.ID, SERVICIOS.IDCATEGORIA "+
+					"FROM CLIENTES, RESERVAS, ESPACIOS, SERVICIOS, VINCULOS "+
+					"WHERE CLIENTES.ID = RESERVAS.IDCLIENTE AND RESERVAS.IDESPACIO = ESPACIOS.ID AND ESPACIOS.ID = SERVICIOS.IDESPACIO AND VINCULOS.ID = CLIENTES.IDVINCULO "+
+					"ORDER BY VINCULOS.ID ASC) WHERE ID = " + id;
+			
+			System.out.println("SQL stmt:" + sqlC);
+			PreparedStatement prepStmtC = conn.prepareStatement(sqlC);
+			recursos.add(prepStmtC);
+			ResultSet rsC = prepStmtC.executeQuery();
+			
+			List<String> servicios = new ArrayList<String>();
+			
+			while (rsC.next()) 
+			{
+				long idS = Long.parseLong(rsC.getString("IDCATEGORIA"));
+				CategoriaServicio catServicio = daoCatServicio.buscarCategoriaServicio(idS);
+				servicios.add(catServicio.getCategoria());
+			}
+			
+			RFC5 resultante =  new RFC5("Cliente", categoria, diasTotal, dineroTotal, servicios);
+			lista.add(resultante);
+		}
+	}
+	
+	//RFC6
+	
+	public RFC6 obtenerUsoPorUsuario(long id) throws SQLException, Exception
+	{				
+		DAOCategoriaServicio daoCatServicio = new DAOCategoriaServicio();
+		daoCatServicio.setConn(conn);
+		
+		String sql = "SELECT CLIENTES.ID, SUM(RESERVAS.DURACION) AS DIASTOTAL, SUM(RESERVAS.PRECIO) AS DINEROTOTAL "+
+				"FROM CLIENTES, RESERVAS "+
+				"WHERE CLIENTES.ID = RESERVAS.IDCLIENTE AND CLIENTES.ID = " + id +
+				" GROUP BY CLIENTES.ID "+
+				"ORDER BY CLIENTES.ID ASC";		
+		
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();	
+		
+		if(!rs.next()) 
+		{		
+			buscarCliente(id);
+			RFC6 resultante =  new RFC6(id, "Cliente", 0, 0, new ArrayList<String>());		
+			return resultante;			
+		}
+		else
+		{
+			int diasTotal = Integer.parseInt(rs.getString("DIASTOTAL"));
+			double dineroTotal = Double.parseDouble(rs.getString("DINEROTOTAL"));
+			
+			String sqlC = "SELECT DISTINCT CLIENTES.ID, SERVICIOS.IDCATEGORIA "+
+					"FROM CLIENTES, RESERVAS, ESPACIOS, SERVICIOS "+
+					"WHERE CLIENTES.ID = RESERVAS.IDCLIENTE AND RESERVAS.IDESPACIO = ESPACIOS.ID AND ESPACIOS.ID = SERVICIOS.IDESPACIO AND CLIENTES.ID = "+ id +
+					" ORDER BY CLIENTES.ID ASC";
+			
+			System.out.println("SQL stmt:" + sqlC);
+			PreparedStatement prepStmtC = conn.prepareStatement(sqlC);
+			recursos.add(prepStmtC);
+			ResultSet rsC = prepStmtC.executeQuery();
+			
+			List<String> servicios = new ArrayList<String>();
+			
+			while (rsC.next()) 
+			{
+				long idS = Long.parseLong(rsC.getString("IDCATEGORIA"));
+				CategoriaServicio catServicio = daoCatServicio.buscarCategoriaServicio(idS);
+				servicios.add(catServicio.getCategoria());
+			}
+			
+			RFC6 resultante =  new RFC6(id, "Cliente", diasTotal, dineroTotal, servicios);		
+			return resultante;
+		}		
 	}
 }

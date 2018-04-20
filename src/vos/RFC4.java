@@ -19,9 +19,9 @@ public class RFC4
 	private Date fechaMayorDate;
 	
 	@JsonProperty(value = "servicios")
-	private List<Long> servicios;
+	private List<String> servicios;
 
-	public RFC4(@JsonProperty(value = "fechaMenor") String fechaMenor, @JsonProperty(value = "fechaMayor") String fechaMayor, @JsonProperty(value = "servicios") List<Long> servicios) {
+	public RFC4(@JsonProperty(value = "fechaMenor") String fechaMenor, @JsonProperty(value = "fechaMayor") String fechaMayor, @JsonProperty(value = "servicios") List<String> servicios) {
 		this.fechaMenor = fechaMenor;
 		this.fechaMayor = fechaMayor;
 		this.servicios = servicios;
@@ -55,7 +55,7 @@ public class RFC4
 		return fechaMayor;
 	}
 
-	public List<Long> getServicios() {
+	public List<String> getServicios() {
 		return servicios;
 	}
 	

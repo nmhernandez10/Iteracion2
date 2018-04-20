@@ -15,6 +15,8 @@ import javax.ws.rs.core.Response;
 import tm.AlohAndesTransactionManager;
 import vos.Espacio;
 import vos.ListaEspacios;
+import vos.ListaRFC5;
+import vos.RFC6;
 
 @Path("general")
 public class GeneralService {
@@ -38,7 +40,7 @@ public class GeneralService {
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
-			ListaEspacios espacios = new ListaEspacios(tm.espaciosPopulares());
+			ListaRFC5 espacios = new ListaRFC5(tm.usosPorCategoria());
 			return Response.status(200).entity(espacios).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -48,16 +50,16 @@ public class GeneralService {
 	// RFC6
 
 	@GET
-	@Path("/usoUsuario/"+ "{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/usoUsuario/"+ "{tipo}"+"/"+"{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteEspacio(Espacio espacio, @PathParam("id") String idS) {
+	public Response deleteEspacio(@PathParam("id") String idS, @PathParam("tipo") String tipo) {
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
-		try {
+		try 
+		{
 			long id = Long.parseLong(idS);
-			espacio = tm.cancelarEspacio(espacio, espacio.getFechaRetiroDate());
-			return Response.status(200).entity(espacio).build();
+			RFC6 usuario = tm.usoPorUsuario(id, tipo);
+			return Response.status(200).entity(usuario).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}

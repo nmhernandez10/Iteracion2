@@ -93,7 +93,7 @@ public class DAOVinculo
 	}
 
 	public Vinculo buscarVinculo(long id) throws SQLException, Exception {
-		String sql = "SELECT * FROM VINCULOS WHERE ID  ='" + id + "'";
+		String sql = "SELECT * FROM VINCULOS WHERE ID  =" + id;
 
 		System.out.println("SQL stmt:" + sql);
 

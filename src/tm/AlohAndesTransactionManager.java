@@ -436,7 +436,7 @@ public class AlohAndesTransactionManager
 			this.conn = darConexion();
 			daoEspacio.setConn(conn);
 
-			resultado = daoEspacio.obtenerEspaciosDisponibles();
+			resultado = daoEspacio.obtenerEspaciosDisponibles(rfc4);
 
 			return resultado;
 		} catch (SQLException e) {

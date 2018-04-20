@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import vos.CategoriaHabitacion;
 import vos.CategoriaServicio;
 import vos.Servicio;
 
@@ -93,7 +94,7 @@ public class DAOCategoriaServicio
 	}
 
 	public CategoriaServicio buscarCategoriaServicio(long id) throws SQLException, Exception {
-		String sql = "SELECT * FROM CATEGORIASSERVICIO WHERE ID  ='" + id + "'";
+		String sql = "SELECT * FROM CATEGORIASSERVICIO WHERE ID  =" + id;
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -120,5 +121,26 @@ public class DAOCategoriaServicio
 		Servicio servicio = daoServicio.buscarServicio(id);
 		
 		return servicio.getCategoria();
+	}
+	
+	public CategoriaServicio buscarCategoriaServicioNombre(String nombre) throws SQLException, Exception 
+	{
+		String sql = "SELECT * FROM CATEGORIASSERVICIO WHERE NOMBRE ='" + nombre + "'";
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		
+		if(!rs.next())
+		{
+			throw new Exception ("No se encontró ninguna categoría de servicio con el nombre '"+ nombre +"'");
+		}
+		
+		long id = Long.parseLong(rs.getString("ID"));
+		String descripcion = rs.getString("DESCRIPCION");
+
+		return new CategoriaServicio(id, nombre, descripcion);
 	}
 }

@@ -93,7 +93,7 @@ public class DAOCategoriaOperador
 	}
 
 	public CategoriaOperador buscarCategoriaOperador(long id) throws SQLException, Exception {
-		String sql = "SELECT * FROM CATEGORIASOPERADOR WHERE ID  ='" + id + "'";
+		String sql = "SELECT * FROM CATEGORIASOPERADOR WHERE ID  =" + id;
 
 		System.out.println("SQL stmt:" + sql);
 

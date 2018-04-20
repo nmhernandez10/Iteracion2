@@ -14,6 +14,7 @@ import vos.Espacio;
 import vos.Operador;
 import vos.CategoriaOperador;
 import vos.RFC1;
+import vos.RFC3;
 
 public class DAOOperador {
 	private ArrayList<Object> recursos;
@@ -177,5 +178,40 @@ public class DAOOperador {
 		}
 
 		return ingresos;
+	}
+	
+	//RFC3
+	
+	public List<RFC3> obtenerOcupacionOperadores() throws SQLException, Exception
+	{
+		
+		String sql = "SELECT OPERADORES.ID AS IDOPERADOR , CASE WHEN TABLACOMPARATIVA.SUMCONT/TABLACOMPARATIVA.SUMTOT IS NULL THEN 0 ELSE TABLACOMPARATIVA.SUMCONT/TABLACOMPARATIVA.SUMTOT END AS INDOCUPACION " +
+				"FROM OPERADORES LEFT OUTER JOIN "+
+				"(SELECT ESPACIOS.IDOPERADOR AS ID, SUM(TABLACONTEOCEROS.CONTEO) AS SUMCONT, SUM(TABLATOTAL.TOTAL) AS SUMTOT "+
+				"FROM ESPACIOS,(SELECT ESPACIOS.ID, TABLACONTEO.CONTEO "+
+				"FROM ESPACIOS LEFT OUTER JOIN (SELECT idEspacio, COUNT(id) AS CONTEO "+
+				"FROM RESERVAS "+
+				"WHERE fechaInicio < sysdate AND (fechaInicio + duracion) > sysdate "+
+				"GROUP BY idEspacio) TABLACONTEO ON ESPACIOS.ID = TABLACONTEO.IDESPACIO) TABLACONTEOCEROS, ("+
+				"SELECT idEspacio, COUNT(id) AS TOTAL "+
+				"FROM RESERVAS "+
+				"GROUP BY idEspacio) TABLATOTAL WHERE ESPACIOS.ID = TABLACONTEOCEROS.id AND TABLACONTEOCEROS.id = TABLATOTAL.idEspacio "+
+				"GROUP BY idOperador) TABLACOMPARATIVA ON OPERADORES.ID = TABLACOMPARATIVA.ID "+
+				"ORDER BY OPERADORES.ID ASC";
+		
+		System.out.println("SQL stmt:" + sql);
+		
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		List<RFC3> ocupaciones = new ArrayList<RFC3>();
+
+		while (rs.next()) {
+			RFC3 nuevo = new RFC3(Long.parseLong(rs.getString("IDOPERADOR")), Double.parseDouble(rs.getString("INDOCUPACION")));
+			ocupaciones.add(nuevo);
+		}
+
+		return ocupaciones;
 	}
 }

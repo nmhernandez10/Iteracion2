@@ -9,7 +9,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import tm.AlohAndesTransactionManager;
+import vos.ListaEspacios;
 import vos.ListaRFC1;
+import vos.ListaRFC3;
 
 @Path("operadores")
 public class OperadorService {
@@ -35,6 +37,22 @@ public class OperadorService {
 		try {
 			ListaRFC1 ingresos = new ListaRFC1(tm.ingresosOperadores());
 			return Response.status(200).entity(ingresos).build();
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+	}
+	
+	//RFC3
+	
+	@GET
+	@Path("/ocupaciones")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response ocupacionOperadores() {
+		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
+
+		try {
+			ListaRFC3 ocupaciones = new ListaRFC3(tm.ocupacionOperadores());
+			return Response.status(200).entity(ocupaciones).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}

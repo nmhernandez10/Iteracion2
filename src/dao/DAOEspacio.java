@@ -239,7 +239,31 @@ public class DAOEspacio {
 
 	// RFC2
 
-	public List<Espacio> espaciosPopulares() throws Exception, SQLException {
+	public List<Espacio> obtenerEspaciosPopulares() throws Exception, SQLException {
+		String sql = "SELECT ID FROM (SELECT RESERVAS.IDESPACIO AS ID, COUNT(RESERVAS.IDCLIENTE) AS CONTEO FROM RESERVAS GROUP BY RESERVAS.IDESPACIO ORDER BY CONTEO DESC) WHERE ROWNUM <= 20";
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		List<Espacio> espacios = new ArrayList<Espacio>();
+
+		while (rs.next()) {
+			long id = Long.parseLong(rs.getString("ID"));
+			Espacio resultante = buscarEspacio(id);
+			espacios.add(resultante);
+		}
+		
+		return espacios;
+	}
+	
+	//RFC4
+	
+	public List<Espacio> obtenerEspaciosDisponibles() throws Exception, SQLException {
+		
+		//AQUÍ VOY
 		String sql = "SELECT ID FROM (SELECT RESERVAS.IDESPACIO AS ID, COUNT(RESERVAS.IDCLIENTE) AS CONTEO FROM RESERVAS GROUP BY RESERVAS.IDESPACIO ORDER BY CONTEO DESC) WHERE ROWNUM <= 20";
 
 		System.out.println("SQL stmt:" + sql);

@@ -17,6 +17,8 @@ import vos.Cliente;
 import vos.Espacio;
 import vos.Operador;
 import vos.RFC1;
+import vos.RFC3;
+import vos.RFC4;
 import vos.Reserva;
 
 public class AlohAndesTransactionManager 
@@ -366,7 +368,7 @@ public class AlohAndesTransactionManager
 			this.conn = darConexion();
 			daoEspacio.setConn(conn);
 
-			resultado = daoEspacio.espaciosPopulares();
+			resultado = daoEspacio.obtenerEspaciosPopulares();
 
 			return resultado;
 		} catch (SQLException e) {
@@ -389,4 +391,72 @@ public class AlohAndesTransactionManager
 			}
 		}
 	}
+	
+	//RFC3
+	
+	public List<RFC3> ocupacionOperadores() throws Exception {
+		DAOOperador daoOperador = new DAOOperador();
+
+		List<RFC3> resultado = new ArrayList<RFC3>();
+		try {
+			this.conn = darConexion();
+			daoOperador.setConn(conn);
+
+			resultado = daoOperador.obtenerOcupacionOperadores();
+
+			return resultado;
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoOperador.cerrarRecursos();
+				if (this.conn != null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+	}	
+	
+	//RFC4
+	
+	public List<Espacio> espaciosDisponibles(RFC4 rfc4) throws Exception {
+		DAOEspacio daoEspacio = new DAOEspacio();
+
+		List<Espacio> resultado = new ArrayList<Espacio>();
+		try {
+			this.conn = darConexion();
+			daoEspacio.setConn(conn);
+
+			resultado = daoEspacio.obtenerEspaciosDisponibles();
+
+			return resultado;
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoEspacio.cerrarRecursos();
+				if (this.conn != null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+	}	
 }

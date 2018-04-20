@@ -1,11 +1,12 @@
 package rest;
 
-import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.Response;
 import tm.AlohAndesTransactionManager;
 import vos.Espacio;
 import vos.ListaEspacios;
+import vos.RFC4;
 
 @Path("espacios")
 public class EspacioService {
@@ -33,7 +35,7 @@ public class EspacioService {
 	// RFC2
 
 	@GET
-	@Path("/espaciospopulares")
+	@Path("/espaciosPopulares")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response espaciosPopulares() {
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
@@ -45,11 +47,28 @@ public class EspacioService {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 	}
+	
+	//RFC4
+	
+	@POST
+	@Path("/disponibles")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteEspacio(RFC4 rfc4) {
+		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
+		try {			
+			List<Espacio> espacios = tm.espaciosDisponibles(rfc4);
+			return Response.status(200).entity(espacios).build();
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+	}
+	
 	// RF6
 
 	@DELETE
-	@Path("/espacio")
+	@Path("/cancelarEspacio")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteEspacio(Espacio espacio) {
@@ -63,4 +82,6 @@ public class EspacioService {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 	}
+	
+	
 }

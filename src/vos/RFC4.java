@@ -19,9 +19,9 @@ public class RFC4
 	private Date fechaMayorDate;
 	
 	@JsonProperty(value = "servicios")
-	private List<String> servicios;
+	private List<Long> servicios;
 
-	public RFC4(@JsonProperty(value = "fechaMenor") String fechaMenor, @JsonProperty(value = "fechaMayor") String fechaMayor, @JsonProperty(value = "servicios") List<String> servicios) {
+	public RFC4(@JsonProperty(value = "fechaMenor") String fechaMenor, @JsonProperty(value = "fechaMayor") String fechaMayor, @JsonProperty(value = "servicios") List<Long> servicios) {
 		this.fechaMenor = fechaMenor;
 		this.fechaMayor = fechaMayor;
 		this.servicios = servicios;
@@ -55,9 +55,11 @@ public class RFC4
 		return fechaMayor;
 	}
 
-	public List<String> getServicios() {
+	public List<Long> getServicios() {
 		return servicios;
 	}
+	
+	
 	
 	//NO SE PUEDEN EDITAR LAS ATRIBUTOS CON LOS MÉTODOS 'SET' DADO QUE SÓLO SE USA INSTANCIAS
 	//DE ESTA CLASE PARA SOLUCIONAR UN REQUERIMIENTO SEGÚN ALGO ENTRADO POR PARÁMETRO EN EL RECURSO

@@ -12,6 +12,7 @@ import java.util.List;
 import vos.Espacio;
 import vos.Habitacion;
 import vos.Operador;
+import vos.RFC4;
 import vos.Reserva;
 import vos.Servicio;
 
@@ -261,10 +262,24 @@ public class DAOEspacio {
 	
 	//RFC4
 	
-	public List<Espacio> obtenerEspaciosDisponibles() throws Exception, SQLException {
+	public List<Espacio> obtenerEspaciosDisponibles(RFC4 rfc4) throws Exception, SQLException {
 		
-		//AQUÍ VOY
-		String sql = "SELECT ID FROM (SELECT RESERVAS.IDESPACIO AS ID, COUNT(RESERVAS.IDCLIENTE) AS CONTEO FROM RESERVAS GROUP BY RESERVAS.IDESPACIO ORDER BY CONTEO DESC) WHERE ROWNUM <= 20";
+		String sql = "SELECT ESPACIOS.ID " +
+				"FROM ESPACIOS INNER JOIN SERVICIOS ON ESPACIOS.ID = SERVICIOS.IDESPACIO " +
+				"WHERE ESPACIOS.ID NOT IN(SELECT ID "+
+				"FROM ESPACIOS "+
+				"WHERE FECHARETIRO < TO_DATE('" + rfc4.getFechaMayor() + "','YYYY-MM-DD')) AND ESPACIOS.ID NOT IN (SELECT idEspacio " +
+				"FROM(SELECT idEspacio, COUNT(ID) as CONTEO "+
+				"FROM RESERVAS "+
+				"WHERE FECHAINICIO > TO_DATE('" + rfc4.getFechaMenor() + "','YYYY-MM-DD') AND FECHAINICIO + DURACION < TO_DATE('" + rfc4.getFechaMayor()+"','YYYY-MM-DD') "+
+				"GROUP BY idEspacio))";
+		
+		List<Long> servicios = rfc4.getServicios();
+		
+		for(long idS : servicios)
+		{
+			sql += " AND SERVICIOS.IDCATEGORIA = " + idS;
+		}
 
 		System.out.println("SQL stmt:" + sql);
 

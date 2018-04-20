@@ -51,7 +51,7 @@ public class EspacioService {
 	//RFC4
 	
 	@POST
-	@Path("/disponibles")
+	@Path("/espaciosDisponibles")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteEspacio(RFC4 rfc4) {

@@ -277,7 +277,7 @@ public class DAOEspacio {
 	
 	public List<Espacio> obtenerEspaciosDisponibles(RFC4 rfc4) throws Exception, SQLException {
 		
-		String sql = "SELECT ESPACIOS.ID " +
+		String sql = "SELECT DISTINCT ESPACIOS.ID " +
 				"FROM ESPACIOS INNER JOIN SERVICIOS ON ESPACIOS.ID = SERVICIOS.IDESPACIO " +
 				"WHERE ESPACIOS.ID NOT IN(SELECT ID "+
 				"FROM ESPACIOS "+
@@ -292,8 +292,16 @@ public class DAOEspacio {
 		DAOCategoriaServicio daoCatServicio = new DAOCategoriaServicio();
 		daoCatServicio.setConn(conn);
 		
+		if(servicios.size() >0)
+		{
+			sql += " AND(";
+		}
+		
+		int conteo = 0;
+		
 		for(String idString : servicios)
 		{
+			conteo ++;
 			long idS;
 			try
 			{				
@@ -305,7 +313,20 @@ public class DAOEspacio {
 				e.printStackTrace();
 				throw new Exception("No existe una categoría de servicios con el nombre '" + idString + "'");
 			}
-			sql += " AND SERVICIOS.IDCATEGORIA = " + idS;
+			
+			if(conteo == 1)
+			{
+				sql += "SERVICIOS.IDCATEGORIA = " + idS;
+			}
+			else
+			{
+				sql += " OR SERVICIOS.IDCATEGORIA = " + idS;
+			}			
+		}
+		
+		if(servicios.size() >0)
+		{
+			sql += ")";
 		}
 
 		System.out.println("SQL stmt:" + sql);

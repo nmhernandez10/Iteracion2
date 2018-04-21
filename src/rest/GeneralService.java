@@ -17,6 +17,7 @@ import vos.Espacio;
 import vos.ListaEspacios;
 import vos.ListaRFC5;
 import vos.RFC6;
+import vos.RFC7;
 
 @Path("general")
 public class GeneralService {
@@ -64,4 +65,17 @@ public class GeneralService {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 	}
+	
+	//RFC7
+	@GET
+	@Path("/analisisOperacion")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response analizarOperacion(RFC7 rfc7) throws Exception {
+		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
+		tm.analizarOperacion(rfc7);
+		return null;
+		
+	}
+	
 }

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+
+import dao.DAOCategoriaOperador;
 import dao.DAOCliente;
 import dao.DAOEspacio;
 import dao.DAOOperador;
@@ -21,6 +23,7 @@ import vos.RFC3;
 import vos.RFC4;
 import vos.RFC5;
 import vos.RFC6;
+import vos.RFC7;
 import vos.Reserva;
 
 public class AlohAndesTransactionManager 
@@ -548,5 +551,38 @@ public class AlohAndesTransactionManager
 	}
 	
 	//RFC7
-	
+	public List<Espacio> analizarOperacion(RFC7 rfc7) throws Exception {
+		DAOOperador daoOperador = new DAOOperador();
+		DAOReserva daoReserva = new DAOReserva();
+
+		RFC7 resultado = rfc7;
+		try {
+			this.conn = darConexion();
+			daoOperador.setConn(conn);
+			daoReserva.setConn(conn);
+
+			resultado = daoOperador.obtenerEspaciosDisponibles(rfc7);
+
+			return resultado;
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoEspacio.cerrarRecursos();
+				if (this.conn != null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+
+	}	
 }

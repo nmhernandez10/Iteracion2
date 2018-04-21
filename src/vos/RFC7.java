@@ -1,5 +1,7 @@
 package vos;
 
+import java.util.Date;
+
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class RFC7 
@@ -15,7 +17,16 @@ public class RFC7
 	 */
 	private int timeUnit;
 	
-
+	/**
+	 * La fecha desde la cual la demanda es la mayor. 
+	 */
+	private Date inicioFechaMayorDemanda;
+	
+	/**
+	 * La fecha hasta la cual la demanda es la mayor. 
+	 */
+	private Date finFechaMayorDemanda;
+	
 	public RFC7(@JsonProperty(value = "categoria") String categoria, @JsonProperty(value = "timeUnit") int timeUnit) {
 		this.categoria = categoria;
 		this.timeUnit = timeUnit;

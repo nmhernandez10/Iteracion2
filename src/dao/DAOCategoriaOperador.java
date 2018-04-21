@@ -59,7 +59,7 @@ public class DAOCategoriaOperador
 	public void addCategoriaOperador(CategoriaOperador categoriaOperador) throws SQLException, Exception {
 		String sql = "INSERT INTO CATEGORIASOPERADOR VALUES (";
 		sql += "ID = " + categoriaOperador.getId() + ",";
-		sql += "NOMBRE= '" + categoriaOperador.getCategoria() + "',";
+		sql += "NOMBRE= '" + categoriaOperador.getNombre() + "',";
 		sql += "DESCRIPCION = '" + categoriaOperador.getDescripcion() + "')";		
 
 		System.out.println("SQL stmt:" + sql);
@@ -72,7 +72,7 @@ public class DAOCategoriaOperador
 	public void updateCategoriaOperador(CategoriaOperador categoriaOperador) throws SQLException, Exception {
 		String sql = "UPDATE CATEGORIASOPERADOR SET ";
 		sql += "ID = " + categoriaOperador.getId() + ",";
-		sql += "NOMBRE= '" + categoriaOperador.getCategoria() + "',";
+		sql += "NOMBRE= '" + categoriaOperador.getNombre() + "',";
 		sql += "DESCRIPCION = '" + categoriaOperador.getDescripcion() + "')";		
 
 		System.out.println("SQL stmt:" + sql);

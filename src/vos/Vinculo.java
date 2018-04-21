@@ -8,17 +8,17 @@ public class Vinculo
 	private long id;
 	
 	@JsonProperty(value = "nombre")
-	private String vinculo;
+	private String nombre;
 	
 	@JsonProperty(value = "descripcion")
 	private String descripcion;
 	
 	public Vinculo(@JsonProperty(value = "id") long id, 
-			@JsonProperty(value = "nombre") String vinculo,
+			@JsonProperty(value = "nombre") String nombre,
 			@JsonProperty(value = "descripcion") String descripcion)
 	{
 		this.id = id;
-		this.vinculo = vinculo;
+		this.nombre = nombre;
 		this.descripcion = descripcion;
 	}
 	
@@ -32,14 +32,14 @@ public class Vinculo
 		this.id = id;
 	}
 
-	public String getVinculo()
+	public String getNombre()
 	{
-		return vinculo;
+		return nombre;
 	}
 
-	public void setVinculo(String vinculo) 
+	public void setNombre(String nombre) 
 	{
-		this.vinculo = vinculo;
+		this.nombre = nombre;
 	}
 
 	public String getDescripcion()

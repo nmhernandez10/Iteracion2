@@ -102,7 +102,7 @@ public class DAOEspacio {
 		sql += espacio.getCapacidad() + ",";
 		sql += espacio.getRegistro() + ",";
 		sql += espacio.getTamaño() + ",'";
-		sql += espacio.getUbicacion() + "',";
+		sql += espacio.getDireccion() + "',";
 		sql += espacio.getPrecio() + ",";	
 		sql += "TO_DATE('" + espacio.getFechaRetiro() + "','YYYY-MM-DD'))";
 
@@ -119,7 +119,7 @@ public class DAOEspacio {
 		sql += "capacidad = " + espacio.getCapacidad() + ",";
 		sql += "registro = " + espacio.getRegistro() + ",";
 		sql += "tamaño = " + espacio.getTamaño() + ",";
-		sql += "direccion = '" + espacio.getUbicacion() + "',";
+		sql += "direccion = '" + espacio.getDireccion() + "',";
 		sql += "precio = " + espacio.getPrecio() + ",";		
 		sql += "fechaRetiro = TO_DATE('"+ espacio.getFechaRetiro() +"','YYYY-MM-DD')";
 		sql += " WHERE id =" + espacio.getId();

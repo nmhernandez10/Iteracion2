@@ -8,17 +8,17 @@ public class CategoriaOperador
 	private long id;
 	
 	@JsonProperty(value = "nombre")
-	private String categoria;
+	private String nombre;
 	
 	@JsonProperty(value = "descripcion")
 	private String descripcion;
 	
 	public CategoriaOperador(@JsonProperty(value = "id") long id, 
-			@JsonProperty(value = "nombre") String categoria,
+			@JsonProperty(value = "nombre") String nombre,
 			@JsonProperty(value = "descripcion") String descripcion)
 	{
 		this.id = id;
-		this.categoria = categoria;
+		this.nombre = nombre;
 		this.descripcion = descripcion;
 	}
 	
@@ -32,14 +32,14 @@ public class CategoriaOperador
 		this.id = id;
 	}
 
-	public String getCategoria()
+	public String getNombre()
 	{
-		return categoria;
+		return nombre;
 	}
 
-	public void setCategoria(String categoria) 
+	public void setNombre(String nombre) 
 	{
-		this.categoria = categoria;
+		this.nombre = nombre;
 	}
 
 	public String getDescripcion()

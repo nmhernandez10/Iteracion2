@@ -31,8 +31,8 @@ public class Espacio {
 	@JsonProperty(value = "tamaño")
 	private double tamaño;
 
-	@JsonProperty(value = "ubicacion")
-	private String ubicacion;
+	@JsonProperty(value = "direccion")
+	private String direccion;
 
 	@JsonProperty(value = "precio")
 	private double precio;
@@ -56,7 +56,7 @@ public class Espacio {
 
 	public Espacio(@JsonProperty(value = "id") long id, @JsonProperty(value = "registro") long registro,
 			@JsonProperty(value = "capacidad") int capacidad, @JsonProperty(value = "tamaño") double tamaño,
-			@JsonProperty(value = "ubicacion") String ubicacion, @JsonProperty(value = "precio") double precio,
+			@JsonProperty(value = "direccion") String direccion, @JsonProperty(value = "precio") double precio,
 			@JsonProperty(value = "fechaRetiro") String fechaRetiro, @JsonProperty(value = "operador") long operador,
 			@JsonProperty(value = "reservas") List<Long> reservas,
 			@JsonProperty(value = "servicios") List<Long> servicios,
@@ -65,7 +65,7 @@ public class Espacio {
 		this.registro = registro;
 		this.capacidad = capacidad;
 		this.tamaño = tamaño;
-		this.ubicacion = ubicacion;
+		this.direccion = direccion;
 		this.precio = precio;
 		this.fechaRetiro = fechaRetiro;		
 		this.operador = operador;
@@ -116,12 +116,12 @@ public class Espacio {
 		this.tamaño = tamaño;
 	}
 
-	public String getUbicacion() {
-		return ubicacion;
+	public String getDireccion() {
+		return direccion;
 	}
 
-	public void setUbicacion(String ubicacion) {
-		this.ubicacion = ubicacion;
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
 	}
 
 	public double getPrecio() {

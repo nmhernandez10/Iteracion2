@@ -63,8 +63,11 @@ public class DAOEspacio {
 			String ubicacion = rs.getString("UBICACION");
 			double precio = Double.parseDouble(rs.getString("PRECIO"));
 			Date fechaRetiroD = rs.getDate("FECHARETIRO");
-			String fechaRetiro = fechaRetiroD.toString();
-			
+			String fechaRetiro = null;
+			if(fechaRetiroD != null)
+			{
+				fechaRetiro = fechaRetiroD.toString();
+			}	
 
 			DAOHabitacion daoHabitacion = new DAOHabitacion();
 			daoHabitacion.setConn(conn);
@@ -160,8 +163,11 @@ public class DAOEspacio {
 		String ubicacion = rs.getString("DIRECCION");
 		double precio = Double.parseDouble(rs.getString("PRECIO"));
 		Date fechaRetiroD = rs.getDate("FECHARETIRO");
-		String fechaRetiro = fechaRetiroD.toString();
-		
+		String fechaRetiro = null;
+		if(fechaRetiroD != null)
+		{
+			fechaRetiro = fechaRetiroD.toString();
+		}		
 		
 		DAOHabitacion daoHabitacion = new DAOHabitacion();
 		daoHabitacion.setConn(conn);

@@ -157,11 +157,15 @@ public class AlohAndesTransactionManager
 			if (cliente.reservaHoy(conn, fecha)) {
 				throw new Exception("No puede hacerse más de una reserva al día");
 			}
-
-			if (espacio.getFechaRetiro() != null && reserva.calcularFechaFin().after(espacio.getFechaRetiroDate())) {
-				throw new Exception(
-						"No se puede reservar con esta duración y fecha de inicio porque el espacio se retira antes de finalizar la reserva");
+			
+			if(espacio.getFechaRetiro()!= null)
+			{
+				if (reserva.calcularFechaFin().after(espacio.getFechaRetiroDate())) {
+					throw new Exception(
+							"No se puede reservar con esta duración y fecha de inicio porque el espacio se retira antes de finalizar la reserva");
+				}
 			}
+			
 
 			daoReserva.addReserva(reserva);
 			conn.commit();

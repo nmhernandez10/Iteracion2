@@ -20,8 +20,8 @@ public class Cliente {
 	@JsonProperty(value = "id")
 	private long id;
 
-	@JsonProperty(value = "identificacion")
-	private long identificacion;
+	@JsonProperty(value = "documento")
+	private long documento;
 
 	@JsonProperty(value = "nombre")
 	private String nombre;
@@ -38,13 +38,13 @@ public class Cliente {
 	@JsonProperty(value = "vinculo")
 	private Vinculo vinculo;
 
-	public Cliente(@JsonProperty(value = "id") long id, @JsonProperty(value = "identificacion") long identificacion,
+	public Cliente(@JsonProperty(value = "id") long id, @JsonProperty(value = "documento") long documento,
 			@JsonProperty(value = "nombre") String nombre, @JsonProperty(value = "edad") int edad,
 			@JsonProperty(value = "direccion") String direccion, @JsonProperty(value = "vinculo") Vinculo vinculo,
 			@JsonProperty(value = "reservas") List<Long> reservas) 
 	{
 		this.id = id;
-		this.identificacion = identificacion;
+		this.documento = documento;
 		this.nombre = nombre;
 		this.edad = edad;
 		this.direccion = direccion;
@@ -60,12 +60,12 @@ public class Cliente {
 		this.id = id;
 	}
 
-	public long getIdentificacion() {
-		return identificacion;
+	public long getDocumento() {
+		return documento;
 	}
 
-	public void setIdentificacion(long identificacion) {
-		this.identificacion = identificacion;
+	public void setDocumento(long documento) {
+		this.documento = documento;
 	}
 
 	public String getNombre() {

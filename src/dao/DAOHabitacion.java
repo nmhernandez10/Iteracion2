@@ -71,14 +71,14 @@ public class DAOHabitacion {
 		sql += habitacion.getId() + ",";
 		sql += habitacion.getEspacio() + ",";
 		sql += habitacion.getCategoria().getId() + ",";
-		sql += habitacion.getCapacidad() + ",";
+		sql += habitacion.getCapacidad() + ",'";
 		char comp;
 		if (habitacion.isCompartido()) {
 			comp = 'Y';
 		} else {
 			comp = 'N';
 		}
-		sql += comp + ")";
+		sql += comp + "')";
 
 		System.out.println("SQL stmt:" + sql);
 

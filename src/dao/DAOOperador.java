@@ -103,7 +103,7 @@ public class DAOOperador {
 	}
 
 	public void deleteOperador(Operador operador) throws SQLException, Exception {
-		String sql = "DELETE FROM OPERADOR";
+		String sql = "DELETE FROM OPERADORES";
 		sql += " WHERE ID = " + operador.getId();
 
 		System.out.println("SQL stmt:" + sql);
@@ -142,7 +142,7 @@ public class DAOOperador {
 	}
 
 	public long buscarOperadorIdEspacio(long id) throws SQLException, Exception {
-		String sql = "SELECT * FROM ESPACIOS WHERE ID  =" + id ;
+		String sql = "SELECT * FROM ESPACIOS WHERE ID =" + id ;
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -158,13 +158,36 @@ public class DAOOperador {
 		Long idOperador = Long.parseLong(rs.getString("IDOPERADOR"));
 		return idOperador;
 	}
+	
+	public Operador buscarOperadorNombre(String nombre) throws SQLException, Exception {
+		String sql = "SELECT * FROM OPERADORES WHERE ID  ='" + nombre +"'";
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		
+		if(!rs.next())
+		{
+			throw new Exception ("No se encontró ningun operador con el nombre = "+ nombre);
+		}
+		
+		Long id = Long.parseLong(rs.getString("ID"));
+		return buscarOperador(id);
+	}
 
 	// RFC1
 
 	public List<RFC1> obtenerIngresosOperadores() throws SQLException, Exception {
 
-		String sql = "SELECT ESPACIOS.IDOPERADOR AS ID, SUM(RESERVAS.PRECIO) AS INGRESOS FROM RESERVAS, ESPACIOS WHERE RESERVAS.IDESPACIO = ESPACIOS.ID AND RESERVAS.FECHAINICIO < "
-				+ " TO_DATE('01-01-2017','DD-MM-YYYY')" + " GROUP BY ESPACIOS.IDOPERADOR";
+		String sql = "SELECT ID, CASE WHEN INGRESOS IS NULL THEN 0 ELSE INGRESOS END AS INGRESOS "+
+						"FROM OPERADORES LEFT OUTER JOIN (SELECT ESPACIOS.IDOPERADOR AS IDOP, SUM(RESERVAS.PRECIO) AS INGRESOS "+
+				        "FROM ESPACIOS INNER JOIN RESERVAS ON RESERVAS.IDESPACIO = ESPACIOS.ID "+
+				        "WHERE   RESERVAS.CANCELADO = 'N' "+
+				        "AND RESERVAS.FECHAINICIO > TO_DATE('2017-01-01','YYYY-MM-DD') "+
+				        "GROUP BY ESPACIOS.IDOPERADOR)TABLAINGRESOS ON OPERADORES.ID = TABLAINGRESOS.IDOP "+
+				        "ORDER BY OPERADORES.ID";
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -242,7 +265,7 @@ public class DAOOperador {
 		while (rs.next()) 
 		{
 			long id = Long.parseLong(rs.getString("ID"));
-			String categoria = daoCatOperador.buscarCategoriaOperador(id).getCategoria();
+			String categoria = daoCatOperador.buscarCategoriaOperador(id).getNombre();
 			int diasTotal = Integer.parseInt(rs.getString("DIASTOTAL"));
 			double dineroTotal = Double.parseDouble(rs.getString("DINEROTOTAL"));
 
@@ -263,7 +286,7 @@ public class DAOOperador {
 			{
 				long idS = Long.parseLong(rsC.getString("IDCATEGORIA"));
 				CategoriaServicio catServicio = daoCatServicio.buscarCategoriaServicio(idS);
-				servicios.add(catServicio.getCategoria());
+				servicios.add(catServicio.getNombre());
 			}
 
 			RFC5 resultante =  new RFC5("Operador", categoria, diasTotal, dineroTotal, servicios);
@@ -317,7 +340,7 @@ public class DAOOperador {
 			{
 				long idS = Long.parseLong(rsC.getString("IDCATEGORIA"));
 				CategoriaServicio catServicio = daoCatServicio.buscarCategoriaServicio(idS);
-				servicios.add(catServicio.getCategoria());
+				servicios.add(catServicio.getNombre());
 			}
 			
 			RFC6 resultante =  new RFC6(id, "Operador", diasTotal, dineroTotal, servicios);		

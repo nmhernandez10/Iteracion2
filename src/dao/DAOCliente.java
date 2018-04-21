@@ -73,7 +73,7 @@ public class DAOCliente {
 		String sql = "INSERT INTO CLIENTES (id, idVinculo, documento, nombre, edad, direccion) VALUES (";
 		sql += cliente.getId() + ",";
 		sql += cliente.getVinculo().getId() + ",";
-		sql += cliente.getIdentificacion() + ",'";
+		sql += cliente.getDocumento() + ",'";
 		sql += cliente.getNombre() + "',";		
 		sql += cliente.getEdad() + ",'";
 		sql += cliente.getDireccion() + "')";		
@@ -88,7 +88,7 @@ public class DAOCliente {
 	public void updateCliente(Cliente cliente) throws SQLException, Exception {
 		String sql = "UPDATE CLIENTES SET ";
 		sql += "idVinculo = " + cliente.getVinculo().getId() + ",";
-		sql += "documento = " + cliente.getIdentificacion() + ",";
+		sql += "documento = " + cliente.getDocumento() + ",";
 		sql += "nombre = '" + cliente.getNombre() + "',";		
 		sql += "edad = " + cliente.getEdad() + ",";
 		sql += "direccion = '" + cliente.getDireccion();
@@ -185,7 +185,7 @@ public class DAOCliente {
 		while (rs.next()) 
 		{
 			long id = Long.parseLong(rs.getString("ID"));
-			String categoria = daoVinculo.buscarVinculo(id).getVinculo();
+			String categoria = daoVinculo.buscarVinculo(id).getNombre();
 			int diasTotal = Integer.parseInt(rs.getString("DIASTOTAL"));
 			double dineroTotal = Double.parseDouble(rs.getString("DINEROTOTAL"));
 			
@@ -205,7 +205,7 @@ public class DAOCliente {
 			{
 				long idS = Long.parseLong(rsC.getString("IDCATEGORIA"));
 				CategoriaServicio catServicio = daoCatServicio.buscarCategoriaServicio(idS);
-				servicios.add(catServicio.getCategoria());
+				servicios.add(catServicio.getNombre());
 			}
 			
 			RFC5 resultante =  new RFC5("Cliente", categoria, diasTotal, dineroTotal, servicios);
@@ -259,7 +259,7 @@ public class DAOCliente {
 			{
 				long idS = Long.parseLong(rsC.getString("IDCATEGORIA"));
 				CategoriaServicio catServicio = daoCatServicio.buscarCategoriaServicio(idS);
-				servicios.add(catServicio.getCategoria());
+				servicios.add(catServicio.getNombre());
 			}
 			
 			RFC6 resultante =  new RFC6(id, "Cliente", diasTotal, dineroTotal, servicios);		

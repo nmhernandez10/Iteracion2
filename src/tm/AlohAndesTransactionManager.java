@@ -199,10 +199,15 @@ public class AlohAndesTransactionManager
 			
 			if (reserva.isCancelado())
 			{
-				throw new Exception("La reserva ya está cancelada");
+				throw new Exception("La reserva no puede cancelarse porque ya estaba cancelada.");
 			}
 
 			Date fechaCancelacion = new Date();
+			
+			if (reserva.getFechaInicioDate().before(fechaCancelacion))
+			{
+				throw new Exception("Esta reserva ya está en curso, no puede cancelarse.");
+			}
 
 			if (reserva.getDuracion() < 7 && fechaCancelacion.before(reserva.calcularFechaConDiasDespues(4))) {
 				reserva.setCancelado(true);

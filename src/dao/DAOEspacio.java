@@ -59,7 +59,8 @@ public class DAOEspacio {
 			double tamaño = Double.parseDouble(rs.getString("TAMAÑO"));
 			String ubicacion = rs.getString("UBICACION");
 			double precio = Double.parseDouble(rs.getString("PRECIO"));
-			String fechaRetiro = rs.getString("FECHARETIRO");
+			Date fechaRetiroD = rs.getDate("FECHARETIRO");
+			String fechaRetiro = fechaRetiroD.toString();
 			
 
 			DAOHabitacion daoHabitacion = new DAOHabitacion();
@@ -97,7 +98,7 @@ public class DAOEspacio {
 		sql += espacio.getTamaño() + ",'";
 		sql += espacio.getUbicacion() + "',";
 		sql += espacio.getPrecio() + ",";	
-		sql += "TO_DATE('"+(espacio.getFechaRetiroDate().getDate()) + "-" + (espacio.getFechaRetiroDate().getMonth() +1) +"-" + (espacio.getFechaRetiroDate().getYear()+1900)  + "','DD-MM-YYYY'))";
+		sql += "TO_DATE('" + espacio.getFechaRetiro() + "','YYYY-MM-DD'))";
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -114,7 +115,7 @@ public class DAOEspacio {
 		sql += "tamaño = " + espacio.getTamaño() + ",";
 		sql += "direccion = '" + espacio.getUbicacion() + "',";
 		sql += "precio = " + espacio.getPrecio() + ",";		
-		sql += "fechaRetiro = TO_DATE('"+(espacio.getFechaRetiroDate().getDate()) + "-" + (espacio.getFechaRetiroDate().getMonth() +1) +"-" + (espacio.getFechaRetiroDate().getYear()+1900)  + "','DD-MM-YYYY')";
+		sql += "fechaRetiro = TO_DATE('"+ espacio.getFechaRetiro() +"','YYYY-MM-DD')";
 		sql += " WHERE id =" + espacio.getId();
 
 		System.out.println("SQL stmt:" + sql);
@@ -155,8 +156,10 @@ public class DAOEspacio {
 		double tamaño = Double.parseDouble(rs.getString("TAMAÑO"));
 		String ubicacion = rs.getString("DIRECCION");
 		double precio = Double.parseDouble(rs.getString("PRECIO"));
-		String fechaRetiro = rs.getString("FECHARETIRO");
-
+		Date fechaRetiroD = rs.getDate("FECHARETIRO");
+		String fechaRetiro = fechaRetiroD.toString();
+		
+		
 		DAOHabitacion daoHabitacion = new DAOHabitacion();
 		daoHabitacion.setConn(conn);
 

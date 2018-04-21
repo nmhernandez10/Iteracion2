@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vos.CategoriaServicio;
+import vos.Cliente;
 import vos.Espacio;
 import vos.Habitacion;
 import vos.Operador;
 import vos.RFC4;
+import vos.RFC8;
 import vos.Reserva;
 import vos.Servicio;
 
@@ -314,5 +316,39 @@ public class DAOEspacio {
 		}
 		
 		return espacios;
+	}
+	
+	//RFC8
+	
+	public List<RFC8> obtenerClientesFrecuentes(long id) throws SQLException, Exception
+	{
+		List<RFC8> resultado = new ArrayList<RFC8>();
+		
+		String sql = "SELECT IDCLIENTE, DURTOTAL, CONTEO "+
+						"FROM(SELECT RESERVAS.IDCLIENTE, SUM(RESERVAS.DURACION) AS DURTOTAL, COUNT(RESERVAS.ID) AS CONTEO "+
+						"FROM RESERVAS, ESPACIOS "+
+						"WHERE RESERVAS.IDESPACIO = ESPACIOS.ID AND ESPACIOS.ID = "+id+
+						" GROUP BY RESERVAS.IDCLIENTE) "+
+						"WHERE DURTOTAL >= 15 OR CONTEO >= 3";
+		
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		
+		DAOCliente daoCliente = new DAOCliente();
+		daoCliente.setConn(conn);
+		
+		while (rs.next()) 
+		{
+			long idCliente = Long.parseLong(rs.getString("IDCLIENTE"));
+			Cliente cliente = daoCliente.buscarCliente(idCliente);
+			int durTotal = rs.getInt("DURTOTAL");
+			int ocasiones = rs.getInt("CONTEO");
+			resultado.add(new RFC8(cliente, durTotal, ocasiones));
+		}
+		
+		return resultado;
 	}
 }

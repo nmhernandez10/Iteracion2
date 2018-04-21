@@ -21,6 +21,7 @@ import vos.Cliente;
 import vos.Espacio;
 import vos.ListaClientes;
 import vos.ListaEspacios;
+import vos.ListaRFC8;
 import vos.RFC4;
 
 @Path("espacios")
@@ -89,7 +90,7 @@ public class EspacioService {
 	
 	// RFC8
 
-	@DELETE
+	@GET
 	@Path("/clientesFrecuentes/" + "{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response clientesFrecuentes(@PathParam("id") String idE) 
@@ -98,7 +99,7 @@ public class EspacioService {
 
 		try {
 
-			ListaClientes clientes = new ListaClientes(new ArrayList<Cliente>());
+			ListaRFC8 clientes = tm.clientesFrecuentes(Long.parseLong(idE));
 			return Response.status(200).entity(clientes).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();

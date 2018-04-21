@@ -15,12 +15,15 @@ import dao.DAOOperador;
 import dao.DAOReserva;
 import vos.Cliente;
 import vos.Espacio;
+import vos.ListaClientes;
+import vos.ListaRFC8;
 import vos.Operador;
 import vos.RFC1;
 import vos.RFC3;
 import vos.RFC4;
 import vos.RFC5;
 import vos.RFC6;
+import vos.RFC8;
 import vos.Reserva;
 
 public class AlohAndesTransactionManager 
@@ -549,5 +552,50 @@ public class AlohAndesTransactionManager
 				throw exception;
 			}
 		}
+	}
+	
+	//RFC8
+	
+	public ListaRFC8 clientesFrecuentes(long idEspacio) throws Exception
+	{
+		DAOEspacio daoEspacio = new DAOEspacio();
+		
+		try {
+			this.conn = darConexion();
+			daoEspacio.setConn(conn);
+			
+			try
+			{
+				daoEspacio.buscarEspacio(idEspacio);
+			}
+			catch(Exception e)
+			{
+				throw e;
+			}
+			
+			List<RFC8> resultado = new ArrayList<RFC8>();
+			
+			resultado = daoEspacio.obtenerClientesFrecuentes(idEspacio);
+
+			return new ListaRFC8(resultado);
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoEspacio.cerrarRecursos();
+				if (this.conn != null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}		
 	}
 }

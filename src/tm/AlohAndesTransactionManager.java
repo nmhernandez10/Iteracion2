@@ -17,6 +17,7 @@ import vos.Cliente;
 import vos.Espacio;
 import vos.ListaClientes;
 import vos.ListaRFC8;
+import vos.ListaRFC9;
 import vos.Operador;
 import vos.RFC1;
 import vos.RFC3;
@@ -24,6 +25,7 @@ import vos.RFC4;
 import vos.RFC5;
 import vos.RFC6;
 import vos.RFC8;
+import vos.RFC9;
 import vos.Reserva;
 
 public class AlohAndesTransactionManager 
@@ -578,6 +580,42 @@ public class AlohAndesTransactionManager
 			resultado = daoEspacio.obtenerClientesFrecuentes(idEspacio);
 
 			return new ListaRFC8(resultado);
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoEspacio.cerrarRecursos();
+				if (this.conn != null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}		
+	}
+	
+	//RFC9
+
+	public ListaRFC9 espaciosPocoDemandados() throws Exception
+	{
+		DAOEspacio daoEspacio = new DAOEspacio();
+
+		try {
+			this.conn = darConexion();
+			daoEspacio.setConn(conn);
+
+			List<RFC9> resultado = new ArrayList<RFC9>();
+
+			resultado = daoEspacio.obtenerEspaciosPocoDemandados();
+
+			return new ListaRFC9(resultado);
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
 			e.printStackTrace();

@@ -16,6 +16,7 @@ import vos.Habitacion;
 import vos.Operador;
 import vos.RFC4;
 import vos.RFC8;
+import vos.RFC9;
 import vos.Reserva;
 import vos.Servicio;
 
@@ -327,7 +328,7 @@ public class DAOEspacio {
 		String sql = "SELECT IDCLIENTE, DURTOTAL, CONTEO "+
 						"FROM(SELECT RESERVAS.IDCLIENTE, SUM(RESERVAS.DURACION) AS DURTOTAL, COUNT(RESERVAS.ID) AS CONTEO "+
 						"FROM RESERVAS, ESPACIOS "+
-						"WHERE RESERVAS.IDESPACIO = ESPACIOS.ID AND ESPACIOS.ID = "+id+
+						"WHERE RESERVAS.IDESPACIO = ESPACIOS.ID AND RESERVAS.CANCELADO = 'N' AND ESPACIOS.ID = "+id+
 						" GROUP BY RESERVAS.IDCLIENTE) "+
 						"WHERE DURTOTAL >= 15 OR CONTEO >= 3";
 		
@@ -349,6 +350,40 @@ public class DAOEspacio {
 			resultado.add(new RFC8(cliente, durTotal, ocasiones));
 		}
 		
+		return resultado;
+	}
+	
+	//RFC9
+
+	public List<RFC9> obtenerEspaciosPocoDemandados() throws SQLException, Exception
+	{
+		List<RFC9> resultado = new ArrayList<RFC9>();
+
+		String sql ="SELECT * FROM(SELECT IDESPACIO, MAX(ESPACIODIAS) AS MAXIMOPERIODO "+
+						"FROM (WITH FECHAS AS(SELECT ROWNUM AS ID, IDESPACIO, FECHAINICIO "+
+						"FROM(SELECT IDESPACIO, FECHAINICIO "+
+						"FROM RESERVAS "+
+						"WHERE RESERVAS.CANCELADO = 'N' "+
+						"ORDER BY IDESPACIO ASC, FECHAINICIO ASC)) "+
+						"SELECT T1.FECHAINICIO - T2.FECHAINICIO AS ESPACIODIAS, T1.IDESPACIO "+
+						"FROM (FECHAS)T1, (FECHAS)T2 "+
+						"WHERE T2.ID = T1.ID -1 AND T2.IDESPACIO = T1.IDESPACIO) "+
+						"GROUP BY IDESPACIO) WHERE MAXIMOPERIODO > 30";
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) 
+		{
+			long idEspacio = Long.parseLong(rs.getString("IDESPACIO"));
+			Espacio espacio = buscarEspacio(idEspacio);
+			int maxPer = rs.getInt("MAXIMOPERIODO");
+			resultado.add(new RFC9(espacio, maxPer));
+		}
+
 		return resultado;
 	}
 }

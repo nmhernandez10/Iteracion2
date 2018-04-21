@@ -22,6 +22,7 @@ import vos.Espacio;
 import vos.ListaClientes;
 import vos.ListaEspacios;
 import vos.ListaRFC8;
+import vos.ListaRFC9;
 import vos.RFC4;
 
 @Path("espacios")
@@ -101,6 +102,24 @@ public class EspacioService {
 
 			ListaRFC8 clientes = tm.clientesFrecuentes(Long.parseLong(idE));
 			return Response.status(200).entity(clientes).build();
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+	}
+	
+	//RFC9
+	
+	@GET
+	@Path("/espaciosPocoDemandados")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response espacios() 
+	{
+		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
+
+		try {
+
+			ListaRFC9 espacios = tm.espaciosPocoDemandados();
+			return Response.status(200).entity(espacios).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import vos.CategoriaHabitacion;
+import vos.CategoriaOperador;
 import vos.Habitacion;
 
 public class DAOCategoriaHabitacion 
@@ -58,7 +59,7 @@ public class DAOCategoriaHabitacion
 	public void addCategoriaHabitacion(CategoriaHabitacion categoriaHabitacion) throws SQLException, Exception {
 		String sql = "INSERT INTO CATEGORIASHABITACION VALUES (";
 		sql += "ID = " + categoriaHabitacion.getId() + ",";
-		sql += "NOMBRE= '" + categoriaHabitacion.getCategoria() + "',";
+		sql += "NOMBRE= '" + categoriaHabitacion.getNombre() + "',";
 		sql += "DESCRIPCION = '" + categoriaHabitacion.getDescripcion() + "')";		
 
 		System.out.println("SQL stmt:" + sql);
@@ -71,7 +72,7 @@ public class DAOCategoriaHabitacion
 	public void updateCategoriaHabitacion(CategoriaHabitacion categoriaHabitacion) throws SQLException, Exception {
 		String sql = "UPDATE CATEGORIASHABITACION SET ";
 		sql += "ID = " + categoriaHabitacion.getId() + ",";
-		sql += "NOMBRE = '" + categoriaHabitacion.getCategoria() + "',";
+		sql += "NOMBRE = '" + categoriaHabitacion.getNombre() + "',";
 		sql += "DESCRIPCION = '" + categoriaHabitacion.getDescripcion() + "')";		
 
 		System.out.println("SQL stmt:" + sql);
@@ -120,5 +121,26 @@ public class DAOCategoriaHabitacion
 		Habitacion habitacion = daoHabitacion.buscarHabitacion(id);
 		
 		return habitacion.getCategoria();
+	}
+	
+	public CategoriaHabitacion buscarCategoriaHabitacionNombre(String nombre) throws SQLException, Exception 
+	{
+		String sql = "SELECT * FROM CATEGORIASHABITACION WHERE NOMBRE ='" + nombre + "'";
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		
+		if(!rs.next())
+		{
+			throw new Exception ("No se encontró ninguna categoría de habitacion con el nombre '"+ nombre +"'");
+		}
+		
+		long id = Long.parseLong(rs.getString("ID"));
+		String descripcion = rs.getString("DESCRIPCION");
+
+		return new CategoriaHabitacion(id, nombre, descripcion);
 	}
 }

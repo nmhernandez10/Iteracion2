@@ -23,6 +23,8 @@ import vos.ListaClientes;
 import vos.ListaEspacios;
 import vos.ListaRFC8;
 import vos.ListaRFC9;
+import vos.RF2;
+import vos.RF3;
 import vos.RFC4;
 
 @Path("espacios")
@@ -38,6 +40,24 @@ public class EspacioService {
 		return "{ \"ERROR\": \"" + e.getMessage() + "\"}";
 	}
 
+	// RF2
+	
+	@POST
+	@Path("/agregarEspacio")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteEspacio(RF2 rf2) {
+		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
+
+		try {
+			
+			Espacio espacio = tm.addEspacio(rf2);
+			return Response.status(200).entity(espacio).build();
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+	}
+	
 	// RFC2
 
 	@GET
@@ -54,13 +74,13 @@ public class EspacioService {
 		}
 	}
 	
-	//RFC4
+	// RFC4
 	
 	@POST
 	@Path("/espaciosDisponibles")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteEspacio(RFC4 rfc4) {
+	public Response espaciosDisponibles(RFC4 rfc4) {
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {			
@@ -107,7 +127,7 @@ public class EspacioService {
 		}
 	}
 	
-	//RFC9
+	// RFC9
 	
 	@GET
 	@Path("/espaciosPocoDemandados")

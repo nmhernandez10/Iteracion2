@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import vos.Vinculo;
+import vos.CategoriaServicio;
 import vos.Cliente;
 
 public class DAOVinculo 
@@ -58,7 +59,7 @@ public class DAOVinculo
 	public void addVinculo(Vinculo vinculo) throws SQLException, Exception {
 		String sql = "INSERT INTO VINCULOS VALUES (";
 		sql += "ID = " + vinculo.getId() + ",";
-		sql += "NOMBRE= " + vinculo.getVinculo() + ",";
+		sql += "NOMBRE= " + vinculo.getNombre() + ",";
 		sql += "DESCRIPCION = " + vinculo.getDescripcion() + ")";		
 
 		System.out.println("SQL stmt:" + sql);
@@ -71,7 +72,7 @@ public class DAOVinculo
 	public void updateVinculo(Vinculo vinculo) throws SQLException, Exception {
 		String sql = "UPDATE VINCULOS SET ";
 		sql += "ID = " + vinculo.getId() + ",";
-		sql += "NOMBRE= '" + vinculo.getVinculo() + "',";
+		sql += "NOMBRE= '" + vinculo.getNombre() + "',";
 		sql += "DESCRIPCION = '" + vinculo.getDescripcion() + "')";		
 
 		System.out.println("SQL stmt:" + sql);
@@ -120,5 +121,26 @@ public class DAOVinculo
 		Cliente cliente = daoCliente.buscarCliente(id);
 		
 		return cliente.getVinculo();
+	}
+	
+	public Vinculo buscarVinculoNombre(String nombre) throws SQLException, Exception 
+	{
+		String sql = "SELECT * FROM VINCULOS WHERE NOMBRE ='" + nombre + "'";
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		
+		if(!rs.next())
+		{
+			throw new Exception ("No se encontró ningún vínculo (con Uniandes) con el nombre '"+ nombre +"'");
+		}
+		
+		long id = Long.parseLong(rs.getString("ID"));
+		String descripcion = rs.getString("DESCRIPCION");
+
+		return new Vinculo(id, nombre, descripcion);
 	}
 }

@@ -78,7 +78,7 @@ public class DAOOperador {
 		sql += operador.getNombre() + "',";
 		sql += operador.getRegistro() + ",";
 		sql += operador.getDocumento() + ")";
-		
+
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -121,12 +121,12 @@ public class DAOOperador {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
-		
+
 		if(!rs.next())
 		{
 			throw new Exception ("No se encontró ningún operador con el id = "+id);
 		}
-		
+
 		long documento = Long.parseLong(rs.getString("DOCUMENTO"));
 		String nombre = rs.getString("NOMBRE");
 		long registro = Long.parseLong(rs.getString("REGISTRO"));
@@ -141,6 +141,7 @@ public class DAOOperador {
 		return new Operador(id, registro, nombre, categoria, espacios, documento);
 	}
 
+
 	public long buscarOperadorIdEspacio(long id) throws SQLException, Exception {
 		String sql = "SELECT * FROM ESPACIOS WHERE ID =" + id ;
 
@@ -149,16 +150,46 @@ public class DAOOperador {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
-		
+
 		if(!rs.next())
 		{
 			throw new Exception ("No se encontró ningun operador con el espacio que tiene id = "+id);
 		}
-		
+
 		Long idOperador = Long.parseLong(rs.getString("IDOPERADOR"));
 		return idOperador;
 	}
-	
+
+	public List<Operador> buscarOperadoresPorCategoria(String categoria) throws SQLException, Exception {
+		DAOCategoriaOperador daoCatOperador= new DAOCategoriaOperador();
+		daoCatOperador.setConn(conn);
+
+		CategoriaOperador catOp= daoCatOperador.buscarCategoriaOperadorNombre(categoria);
+
+		String sql = "SELECT * FROM OPERADORES WHERE IDCATEGORIA  =" + catOp.getId();
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		ArrayList<Operador> listaRet = new ArrayList<>();
+		while(!rs.next()) {
+			long id = Long.parseLong(rs.getString("ID"));
+			long documento = Long.parseLong(rs.getString("DOCUMENTO"));
+			String nombre = rs.getString("NOMBRE");
+			long registro = Integer.parseInt(rs.getString("REGISTRO"));
+			DAOCategoriaOperador daoCategoriaOperador = new DAOCategoriaOperador();			
+			daoCategoriaOperador.setConn(conn);					
+			DAOEspacio daoEspacio = new DAOEspacio();
+			daoEspacio.setConn(conn);
+
+			List<Long> espacios = daoEspacio.buscarEspaciosIdOperador(id);
+
+			listaRet.add(new Operador(id, registro, nombre, catOp, espacios, documento));		
+		}
+		return listaRet;
+	}
+
 	public Operador buscarOperadorNombre(String nombre) throws SQLException, Exception {
 		String sql = "SELECT * FROM OPERADORES WHERE ID  ='" + nombre +"'";
 
@@ -182,12 +213,12 @@ public class DAOOperador {
 	public List<RFC1> obtenerIngresosOperadores() throws SQLException, Exception {
 
 		String sql = "SELECT ID, CASE WHEN INGRESOS IS NULL THEN 0 ELSE INGRESOS END AS INGRESOS "+
-						"FROM OPERADORES LEFT OUTER JOIN (SELECT ESPACIOS.IDOPERADOR AS IDOP, SUM(RESERVAS.PRECIO) AS INGRESOS "+
-				        "FROM ESPACIOS INNER JOIN RESERVAS ON RESERVAS.IDESPACIO = ESPACIOS.ID "+
-				        "WHERE   RESERVAS.CANCELADO = 'N' "+
-				        "AND RESERVAS.FECHAINICIO > TO_DATE('2017-01-01','YYYY-MM-DD') "+
-				        "GROUP BY ESPACIOS.IDOPERADOR)TABLAINGRESOS ON OPERADORES.ID = TABLAINGRESOS.IDOP "+
-				        "ORDER BY OPERADORES.ID";
+				"FROM OPERADORES LEFT OUTER JOIN (SELECT ESPACIOS.IDOPERADOR AS IDOP, SUM(RESERVAS.PRECIO) AS INGRESOS "+
+				"FROM ESPACIOS INNER JOIN RESERVAS ON RESERVAS.IDESPACIO = ESPACIOS.ID "+
+				"WHERE   RESERVAS.CANCELADO = 'N' "+
+				"AND RESERVAS.FECHAINICIO > TO_DATE('2017-01-01','YYYY-MM-DD') "+
+				"GROUP BY ESPACIOS.IDOPERADOR)TABLAINGRESOS ON OPERADORES.ID = TABLAINGRESOS.IDOP "+
+				"ORDER BY OPERADORES.ID";
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -204,12 +235,12 @@ public class DAOOperador {
 
 		return ingresos;
 	}
-	
+
 	//RFC3
-	
+
 	public List<RFC3> obtenerOcupacionOperadores() throws SQLException, Exception
 	{
-		
+
 		String sql = "SELECT OPERADORES.ID AS IDOPERADOR , CASE WHEN TABLACOMPARATIVA.SUMCONT/TABLACOMPARATIVA.SUMTOT IS NULL THEN 0 ELSE TABLACOMPARATIVA.SUMCONT/TABLACOMPARATIVA.SUMTOT END AS INDOCUPACION " +
 				"FROM OPERADORES LEFT OUTER JOIN "+
 				"(SELECT ESPACIOS.IDOPERADOR AS ID, SUM(TABLACONTEOCEROS.CONTEO) AS SUMCONT, SUM(TABLATOTAL.TOTAL) AS SUMTOT "+
@@ -223,9 +254,9 @@ public class DAOOperador {
 				"GROUP BY idEspacio) TABLATOTAL WHERE ESPACIOS.ID = TABLACONTEOCEROS.id AND TABLACONTEOCEROS.id = TABLATOTAL.idEspacio "+
 				"GROUP BY idOperador) TABLACOMPARATIVA ON OPERADORES.ID = TABLACOMPARATIVA.ID "+
 				"ORDER BY OPERADORES.ID ASC";
-		
+
 		System.out.println("SQL stmt:" + sql);
-		
+
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
@@ -239,9 +270,9 @@ public class DAOOperador {
 
 		return ocupaciones;
 	}
-	
+
 	//RFC5
-	
+
 	public void obtenerUsosPorCategoria(List<RFC5> lista) throws SQLException, Exception
 	{
 		DAOCategoriaOperador daoCatOperador = new DAOCategoriaOperador();
@@ -270,10 +301,10 @@ public class DAOOperador {
 			double dineroTotal = Double.parseDouble(rs.getString("DINEROTOTAL"));
 
 			String sqlC = "SELECT ID, IDCATEGORIA "+
-							"FROM (SELECT DISTINCT CATEGORIASOPERADOR.ID, SERVICIOS.IDCATEGORIA "+
-							"FROM OPERADORES, ESPACIOS, SERVICIOS, CATEGORIASOPERADOR "+
-							"WHERE OPERADORES.ID = ESPACIOS.IDOPERADOR AND ESPACIOS.ID = SERVICIOS.IDESPACIO AND CATEGORIASOPERADOR.ID = OPERADORES.IDCATEGORIA "+
-							"ORDER BY CATEGORIASOPERADOR.ID ASC) WHERE ID = " + id;
+					"FROM (SELECT DISTINCT CATEGORIASOPERADOR.ID, SERVICIOS.IDCATEGORIA "+
+					"FROM OPERADORES, ESPACIOS, SERVICIOS, CATEGORIASOPERADOR "+
+					"WHERE OPERADORES.ID = ESPACIOS.IDOPERADOR AND ESPACIOS.ID = SERVICIOS.IDESPACIO AND CATEGORIASOPERADOR.ID = OPERADORES.IDCATEGORIA "+
+					"ORDER BY CATEGORIASOPERADOR.ID ASC) WHERE ID = " + id;
 
 			System.out.println("SQL stmt:" + sqlC);
 			PreparedStatement prepStmtC = conn.prepareStatement(sqlC);
@@ -293,26 +324,26 @@ public class DAOOperador {
 			lista.add(resultante);
 		}
 	}
-	
+
 	//RFC6
-	
+
 	public RFC6 obtenerUsoPorUsuario(long id) throws SQLException, Exception
 	{				
 		DAOCategoriaServicio daoCatServicio = new DAOCategoriaServicio();
 		daoCatServicio.setConn(conn);
-		
+
 		String sql = "SELECT OPERADORES.ID, SUM(RESERVAS.DURACION) AS DIASTOTAL, SUM(RESERVAS.PRECIO) AS DINEROTOTAL "+
 				"FROM OPERADORES, ESPACIOS, RESERVAS "+
 				"WHERE OPERADORES.ID = ESPACIOS.IDOPERADOR AND ESPACIOS.ID = RESERVAS.IDESPACIO AND OPERADORES.ID = " + id +
 				" GROUP BY OPERADORES.ID "+
 				"ORDER BY OPERADORES.ID ASC";		
-		
+
 		System.out.println("SQL stmt:" + sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();	
-		
+
 		if(!rs.next()) 
 		{
 			buscarOperador(id);
@@ -323,26 +354,26 @@ public class DAOOperador {
 		{
 			int diasTotal = Integer.parseInt(rs.getString("DIASTOTAL"));
 			double dineroTotal = Double.parseDouble(rs.getString("DINEROTOTAL"));
-			
+
 			String sqlC = "SELECT DISTINCT OPERADORES.ID, SERVICIOS.IDCATEGORIA "+
 					"FROM OPERADORES, ESPACIOS, SERVICIOS "+
 					"WHERE OPERADORES.ID = ESPACIOS.IDOPERADOR AND ESPACIOS.ID = SERVICIOS.IDESPACIO AND OPERADORES.ID = "+ id +
 					" ORDER BY OPERADORES.ID ASC";
-			
+
 			System.out.println("SQL stmt:" + sqlC);
 			PreparedStatement prepStmtC = conn.prepareStatement(sqlC);
 			recursos.add(prepStmtC);
 			ResultSet rsC = prepStmtC.executeQuery();
-			
+
 			List<String> servicios = new ArrayList<String>();
-			
+
 			while (rsC.next()) 
 			{
 				long idS = Long.parseLong(rsC.getString("IDCATEGORIA"));
 				CategoriaServicio catServicio = daoCatServicio.buscarCategoriaServicio(idS);
 				servicios.add(catServicio.getNombre());
 			}
-			
+
 			RFC6 resultante =  new RFC6(id, "Operador", diasTotal, dineroTotal, servicios);		
 			return resultante;
 		}		

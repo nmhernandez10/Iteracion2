@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-
 import dao.DAOCategoriaHabitacion;
 import dao.DAOCategoriaOperador;
 import dao.DAOCategoriaServicio;
@@ -27,7 +26,6 @@ import vos.CategoriaServicio;
 import vos.Cliente;
 import vos.Espacio;
 import vos.Habitacion;
-import vos.ListaClientes;
 import vos.ListaRFC8;
 import vos.ListaRFC9;
 import vos.Operador;
@@ -41,6 +39,7 @@ import vos.RFC3;
 import vos.RFC4;
 import vos.RFC5;
 import vos.RFC6;
+import vos.RFC7;
 import vos.RFC8;
 import vos.RFC9;
 import vos.Reserva;
@@ -455,16 +454,16 @@ public class AlohAndesTransactionManager
 			daoReserva.setConn(conn);
 			daoCliente.setConn(conn);
 			daoEspacio.setConn(conn);
-			
+
 			reserva = daoReserva.buscarReserva(reserva.getId());
-			
+
 			if (reserva.isCancelado())
 			{
 				throw new Exception("La reserva no puede cancelarse porque ya estaba cancelada.");
 			}
 
 			Date fechaCancelacion = new Date();
-			
+
 			if (reserva.getFechaInicioDate().before(fechaCancelacion))
 			{
 				throw new Exception("Esta reserva ya está en curso, no puede cancelarse.");
@@ -491,9 +490,9 @@ public class AlohAndesTransactionManager
 			}
 
 			daoReserva.updateReserva(reserva);
-			
+
 			conn.commit();
-			
+
 			return reserva;
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
@@ -531,12 +530,12 @@ public class AlohAndesTransactionManager
 			daoReserva.setConn(conn);
 			daoOperador.setConn(conn);
 			daoEspacio.setConn(conn);
-			
+
 			if(fechaCancelacion == null)
 			{
 				fechaCancelacion = new Date();
 			}
-			
+
 			Operador operador = null;
 			List<Reserva> reservas = new ArrayList<Reserva>();
 
@@ -564,13 +563,13 @@ public class AlohAndesTransactionManager
 							"Hay reservas hechas en el espacio que culminan después de la cancelación propuesta. Asegúrese que no se está comprometido.");
 				}
 			}		
-			
+
 			espacio.setFechaRetiroDate(fechaCancelacion);
-			
+
 			daoEspacio.updateEspacio(espacio);
-			
+
 			conn.commit();
-			
+
 			return espacio;
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
@@ -663,9 +662,8 @@ public class AlohAndesTransactionManager
 			}
 		}
 	}
-	
+
 	// RFC3
-	
 	public List<RFC3> ocupacionOperadores() throws Exception {
 		DAOOperador daoOperador = new DAOOperador();
 
@@ -730,6 +728,7 @@ public class AlohAndesTransactionManager
 				throw exception;
 			}
 		}
+
 	}	
 	
 	// RFC5
@@ -743,7 +742,7 @@ public class AlohAndesTransactionManager
 			this.conn = darConexion();
 			daoCliente.setConn(conn);
 			daoOperador.setConn(conn);
-			
+
 			daoCliente.obtenerUsosPorCategoria(resultado);
 			daoOperador.obtenerUsosPorCategoria(resultado);
 
@@ -781,7 +780,7 @@ public class AlohAndesTransactionManager
 			this.conn = darConexion();
 			daoCliente.setConn(conn);
 			daoOperador.setConn(conn);
-			
+
 			if(!tipo.equals("cliente") && !tipo.equals("operador"))
 			{
 				throw new Exception("El servicio sólo es apto para 'cliente' u 'operador', revise que X tiene alguno de esos valores en usoUsuario/X/idUsuario");
@@ -817,17 +816,36 @@ public class AlohAndesTransactionManager
 			}
 		}
 	}
+
+	//RFC7
+	public List<Date> analizarOperacion(RFC7 rfc7) throws Exception {
+		DAOOperador daoOperador = new DAOOperador();
+		DAOReserva daoReserva = new DAOReserva();
+
+		RFC7 resultado = rfc7;
+		try {
+			this.conn = darConexion();
+			daoOperador.setConn(conn);
+			daoReserva.setConn(conn);
+
+			ArrayList<Operador> listaOperadores = (ArrayList<Operador>)daoOperador.buscarOperadoresPorCategoria(rfc7.getcategoria());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	// RFC8
 	
 	public ListaRFC8 clientesFrecuentes(long idEspacio) throws Exception
 	{
 		DAOEspacio daoEspacio = new DAOEspacio();
-		
+
 		try {
 			this.conn = darConexion();
 			daoEspacio.setConn(conn);
-			
+
 			try
 			{
 				daoEspacio.buscarEspacio(idEspacio);
@@ -836,9 +854,9 @@ public class AlohAndesTransactionManager
 			{
 				throw e;
 			}
-			
+
 			List<RFC8> resultado = new ArrayList<RFC8>();
-			
+
 			resultado = daoEspacio.obtenerClientesFrecuentes(idEspacio);
 
 			return new ListaRFC8(resultado);
@@ -896,6 +914,7 @@ public class AlohAndesTransactionManager
 				exception.printStackTrace();
 				throw exception;
 			}
-		}		
-	}
+		}
+
+	}	
 }

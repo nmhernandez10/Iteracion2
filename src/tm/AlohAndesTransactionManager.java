@@ -10,14 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-
-<<<<<<< HEAD
-import dao.DAOCategoriaOperador;
-=======
 import dao.DAOCategoriaHabitacion;
 import dao.DAOCategoriaOperador;
 import dao.DAOCategoriaServicio;
->>>>>>> origin/master
 import dao.DAOCliente;
 import dao.DAOEspacio;
 import dao.DAOHabitacion;
@@ -31,7 +26,6 @@ import vos.CategoriaServicio;
 import vos.Cliente;
 import vos.Espacio;
 import vos.Habitacion;
-import vos.ListaClientes;
 import vos.ListaRFC8;
 import vos.ListaRFC9;
 import vos.Operador;

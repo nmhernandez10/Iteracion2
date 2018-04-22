@@ -180,7 +180,7 @@ public class DAOCliente {
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();	
+		ResultSet rs = prepStmt.executeQuery();
 		
 		while (rs.next()) 
 		{

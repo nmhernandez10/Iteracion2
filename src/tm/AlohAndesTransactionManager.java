@@ -17,6 +17,9 @@ import dao.DAOOperador;
 import dao.DAOReserva;
 import vos.Cliente;
 import vos.Espacio;
+import vos.ListaClientes;
+import vos.ListaRFC8;
+import vos.ListaRFC9;
 import vos.Operador;
 import vos.RFC1;
 import vos.RFC3;
@@ -24,6 +27,8 @@ import vos.RFC4;
 import vos.RFC5;
 import vos.RFC6;
 import vos.RFC7;
+import vos.RFC8;
+import vos.RFC9;
 import vos.Reserva;
 
 public class AlohAndesTransactionManager 
@@ -96,15 +101,15 @@ public class AlohAndesTransactionManager
 				e.printStackTrace();
 				throw e;
 			}		
-			
+
 			if(reserva.getDuracion() <= 0)
 			{
 				throw new Exception ("La duración tiene que ser entera y positiva para representar los días de la reserva");
 			}
-			
+
 			reserva.setFechaReservaDate(new Date());
 			Date fecha = reserva.getFechaReservaDate();
-			
+
 			if (fecha.after(reserva.getFechaInicioDate())) {
 				throw new Exception("La reserva debe iniciar después que la fecha actual");
 			}
@@ -127,11 +132,11 @@ public class AlohAndesTransactionManager
 							|| cliente.getVinculo().getVinculo().toUpperCase().equals("PROFESOR_INVITADO"))) {
 				throw new Exception("Sólo estudiantes, profesores y empleados pueden usar vivienda universitaria");
 			}
-			
+
 			//Verifico franjas permitidas
-			
+
 			List<Long> reservasId = daoReserva.buscarReservasIdCliente(reserva.getIdCliente());
-			
+
 			for(long resId : reservasId)
 			{
 				Reserva res = daoReserva.buscarReserva(resId);
@@ -140,9 +145,9 @@ public class AlohAndesTransactionManager
 					throw new Exception ("El cliente tiene ya reservas en estas fechas");
 				}
 			}
-			
+
 			reservasId = daoReserva.buscarReservasIdEspacio(reserva.getIdEspacio());
-			
+
 			for(long resId : reservasId)
 			{
 				Reserva res = daoReserva.buscarReserva(resId);
@@ -151,15 +156,19 @@ public class AlohAndesTransactionManager
 					throw new Exception ("El espacio tiene ya reservas en estas fechas");
 				}
 			}
-			
+
 			if (cliente.reservaHoy(conn, fecha)) {
 				throw new Exception("No puede hacerse más de una reserva al día");
 			}
 
-			if (espacio.getFechaRetiro() != null && reserva.calcularFechaFin().after(espacio.getFechaRetiroDate())) {
-				throw new Exception(
-						"No se puede reservar con esta duración y fecha de inicio porque el espacio se retira antes de finalizar la reserva");
+			if(espacio.getFechaRetiro()!= null)
+			{
+				if (reserva.calcularFechaFin().after(espacio.getFechaRetiroDate())) {
+					throw new Exception(
+							"No se puede reservar con esta duración y fecha de inicio porque el espacio se retira antes de finalizar la reserva");
+				}
 			}
+
 
 			daoReserva.addReserva(reserva);
 			conn.commit();
@@ -197,15 +206,20 @@ public class AlohAndesTransactionManager
 			daoReserva.setConn(conn);
 			daoCliente.setConn(conn);
 			daoEspacio.setConn(conn);
-			
+
 			reserva = daoReserva.buscarReserva(reserva.getId());
-			
+
 			if (reserva.isCancelado())
 			{
-				throw new Exception("La reserva ya está cancelada");
+				throw new Exception("La reserva no puede cancelarse porque ya estaba cancelada.");
 			}
 
 			Date fechaCancelacion = new Date();
+
+			if (reserva.getFechaInicioDate().before(fechaCancelacion))
+			{
+				throw new Exception("Esta reserva ya está en curso, no puede cancelarse.");
+			}
 
 			if (reserva.getDuracion() < 7 && fechaCancelacion.before(reserva.calcularFechaConDiasDespues(4))) {
 				reserva.setCancelado(true);
@@ -228,9 +242,9 @@ public class AlohAndesTransactionManager
 			}
 
 			daoReserva.updateReserva(reserva);
-			
+
 			conn.commit();
-			
+
 			return reserva;
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
@@ -266,12 +280,12 @@ public class AlohAndesTransactionManager
 			daoReserva.setConn(conn);
 			daoOperador.setConn(conn);
 			daoEspacio.setConn(conn);
-			
+
 			if(fechaCancelacion == null)
 			{
 				fechaCancelacion = new Date();
 			}
-			
+
 			Operador operador = null;
 			List<Reserva> reservas = new ArrayList<Reserva>();
 
@@ -299,13 +313,13 @@ public class AlohAndesTransactionManager
 							"Hay reservas hechas en el espacio que culminan después de la cancelación propuesta. Asegúrese que no se está comprometido.");
 				}
 			}		
-			
+
 			espacio.setFechaRetiroDate(fechaCancelacion);
-			
+
 			daoEspacio.updateEspacio(espacio);
-			
+
 			conn.commit();
-			
+
 			return espacio;
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
@@ -396,9 +410,9 @@ public class AlohAndesTransactionManager
 			}
 		}
 	}
-	
+
 	//RFC3
-	
+
 	public List<RFC3> ocupacionOperadores() throws Exception {
 		DAOOperador daoOperador = new DAOOperador();
 
@@ -430,9 +444,9 @@ public class AlohAndesTransactionManager
 			}
 		}
 	}	
-	
+
 	//RFC4
-	
+
 	public List<Espacio> espaciosDisponibles(RFC4 rfc4) throws Exception {
 		DAOEspacio daoEspacio = new DAOEspacio();
 
@@ -465,9 +479,9 @@ public class AlohAndesTransactionManager
 		}
 
 	}	
-	
+
 	//RFC5
-	
+
 	public List<RFC5> usosPorCategoria() throws Exception {
 		DAOOperador daoOperador = new DAOOperador();
 		DAOCliente daoCliente = new DAOCliente();
@@ -477,7 +491,7 @@ public class AlohAndesTransactionManager
 			this.conn = darConexion();
 			daoCliente.setConn(conn);
 			daoOperador.setConn(conn);
-			
+
 			daoCliente.obtenerUsosPorCategoria(resultado);
 			daoOperador.obtenerUsosPorCategoria(resultado);
 
@@ -502,9 +516,9 @@ public class AlohAndesTransactionManager
 			}
 		}
 	}
-	
+
 	//RFC6
-	
+
 	public RFC6 usoPorUsuario(long id, String tipo) throws Exception {
 		DAOOperador daoOperador = new DAOOperador();
 		DAOCliente daoCliente = new DAOCliente();
@@ -514,7 +528,7 @@ public class AlohAndesTransactionManager
 			this.conn = darConexion();
 			daoCliente.setConn(conn);
 			daoOperador.setConn(conn);
-			
+
 			if(!tipo.equals("cliente") && !tipo.equals("operador"))
 			{
 				throw new Exception("El servicio sólo es apto para 'cliente' u 'operador', revise que X tiene alguno de esos valores en usoUsuario/X/idUsuario");
@@ -549,9 +563,9 @@ public class AlohAndesTransactionManager
 			}
 		}
 	}
-	
+
 	//RFC7
-	public List<Espacio> analizarOperacion(RFC7 rfc7) throws Exception {
+	public List<Date> analizarOperacion(RFC7 rfc7) throws Exception {
 		DAOOperador daoOperador = new DAOOperador();
 		DAOReserva daoReserva = new DAOReserva();
 
@@ -561,9 +575,74 @@ public class AlohAndesTransactionManager
 			daoOperador.setConn(conn);
 			daoReserva.setConn(conn);
 
-			resultado = daoOperador.obtenerEspaciosDisponibles(rfc7);
+			ArrayList<Operador> listaOperadores = (ArrayList<Operador>)daoOperador.buscarOperadoresPorCategoria(rfc7.getcategoria());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-			return resultado;
+	//RFC8
+
+	public ListaRFC8 clientesFrecuentes(long idEspacio) throws Exception
+	{
+		DAOEspacio daoEspacio = new DAOEspacio();
+
+		try {
+			this.conn = darConexion();
+			daoEspacio.setConn(conn);
+
+			try
+			{
+				daoEspacio.buscarEspacio(idEspacio);
+			}
+			catch(Exception e)
+			{
+				throw e;
+			}
+
+			List<RFC8> resultado = new ArrayList<RFC8>();
+
+			resultado = daoEspacio.obtenerClientesFrecuentes(idEspacio);
+
+			return new ListaRFC8(resultado);
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoEspacio.cerrarRecursos();
+				if (this.conn != null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}		
+	}
+
+	//RFC9
+
+	public ListaRFC9 espaciosPocoDemandados() throws Exception
+	{
+		DAOEspacio daoEspacio = new DAOEspacio();
+
+		try {
+			this.conn = darConexion();
+			daoEspacio.setConn(conn);
+
+			List<RFC9> resultado = new ArrayList<RFC9>();
+
+			resultado = daoEspacio.obtenerEspaciosPocoDemandados();
+
+			return new ListaRFC9(resultado);
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
 			e.printStackTrace();

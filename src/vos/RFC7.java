@@ -1,6 +1,8 @@
 package vos;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -18,18 +20,14 @@ public class RFC7
 	private int timeUnit;
 	
 	/**
-	 * La fecha desde la cual la demanda es la mayor. 
+	 * La lista de fechas a retornar. 
 	 */
-	private Date inicioFechaMayorDemanda;
-	
-	/**
-	 * La fecha hasta la cual la demanda es la mayor. 
-	 */
-	private Date finFechaMayorDemanda;
+	private List<Date> fechasARetornar;
 	
 	public RFC7(@JsonProperty(value = "categoria") String categoria, @JsonProperty(value = "timeUnit") int timeUnit) {
 		this.categoria = categoria;
 		this.timeUnit = timeUnit;
+		this.setFechasARetornar(new ArrayList<Date>());
 	}
 
 	public String getcategoria() {
@@ -38,6 +36,20 @@ public class RFC7
 
 	public int gettimeUnit() {
 		return timeUnit;
+	}
+
+	/**
+	 * @return the fechasARetornar
+	 */
+	public List<Date> getFechasARetornar() {
+		return fechasARetornar;
+	}
+
+	/**
+	 * @param fechasARetornar the fechasARetornar to set
+	 */
+	public void setFechasARetornar(List<Date> fechasARetornar) {
+		this.fechasARetornar = fechasARetornar;
 	}
 	
 	

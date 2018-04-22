@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import vos.CategoriaOperador;
+import vos.CategoriaServicio;
 import vos.Operador;
 
 public class DAOCategoriaOperador 
@@ -120,5 +121,26 @@ public class DAOCategoriaOperador
 		Operador operador = daoOperador.buscarOperador(id);
 		
 		return operador.getCategoria();
+	}
+	
+	public CategoriaOperador buscarCategoriaOperadorNombre(String nombre) throws SQLException, Exception 
+	{
+		String sql = "SELECT * FROM CATEGORIASOPERADOR WHERE NOMBRE ='" + nombre + "'";
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		
+		if(!rs.next())
+		{
+			throw new Exception ("No se encontró ninguna categoría de operador con el nombre '"+ nombre +"'");
+		}
+		
+		long id = Long.parseLong(rs.getString("ID"));
+		String descripcion = rs.getString("DESCRIPCION");
+
+		return new CategoriaOperador(id, nombre, descripcion);
 	}
 }

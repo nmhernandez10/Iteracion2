@@ -62,7 +62,7 @@ public class Reserva {
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		
 		try
@@ -72,7 +72,7 @@ public class Reserva {
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 

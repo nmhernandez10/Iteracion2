@@ -140,38 +140,7 @@ public class DAOOperador {
 
 		return new Operador(id, registro, nombre, categoria, espacios, documento);
 	}
-	
-	public Operador buscarOperadorPorCategoria(String categoria) throws SQLException, Exception {
-		
-		DAOCategoriaOperador daoCatOperador = new DAOCategoriaOperador();
-		daoCatOperador.setConn(conn);
-		
-		String sql = "SELECT * FROM CATEGORIASOPERADOR WHERE NOMBRE = " + categoria ;
 
-		System.out.println("SQL stmt:" + sql);
-
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
-		
-		if(!rs.next())
-		{
-			throw new Exception ("No se encontró ningún operador con categoría: "+categoria);
-		}
-		
-		long documento = Long.parseLong(rs.getString("DOCUMENTO"));
-		String nombre = rs.getString("NOMBRE");
-		long registro = Long.parseLong(rs.getString("REGISTRO"));
-		DAOCategoriaOperador daoCategoriaOperador = new DAOCategoriaOperador();			
-		daoCategoriaOperador.setConn(conn);		
-		CategoriaOperador categoria = daoCategoriaOperador.buscarCategoriaOperador(Long.parseLong(rs.getString("IDCATEGORIA")));			
-		DAOEspacio daoEspacio = new DAOEspacio();
-		daoEspacio.setConn(conn);
-
-		List<Long> espacios = daoEspacio.buscarEspaciosIdOperador(id);
-
-		return new Operador(id, registro, nombre, categoria, espacios, documento);
-	}
 
 	public long buscarOperadorIdEspacio(long id) throws SQLException, Exception {
 		String sql = "SELECT * FROM ESPACIOS WHERE ID  =" + id ;
@@ -189,6 +158,36 @@ public class DAOOperador {
 		
 		Long idOperador = Long.parseLong(rs.getString("IDOPERADOR"));
 		return idOperador;
+	}
+	
+	public List<Operador> buscarOperadoresPorCategoria(String categoria) throws SQLException, Exception {
+		DAOCategoriaOperador daoCatOperador= new DAOCategoriaOperador();
+		daoCatOperador.setConn(conn);
+		
+		CategoriaOperador catOp= daoCatOperador.buscarCategoriaOperadorNombre(categoria);
+		
+		String sql = "SELECT * FROM OPERADORES WHERE IDCATEGORIA  =" + catOp.getId();
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		
+		ArrayList<Operador> listaRet = new ArrayList<>();
+		while(!rs.next()) {
+			long id = Long.parseLong(rs.getString("ID"));
+			long documento = Long.parseLong(rs.getString("DOCUMENTO"));
+			String nombre = rs.getString("NOMBRE");
+			long registro = Integer.parseInt(rs.getString("REGISTRO"));
+			DAOCategoriaOperador daoCategoriaOperador = new DAOCategoriaOperador();			
+			daoCategoriaOperador.setConn(conn);					
+			DAOEspacio daoEspacio = new DAOEspacio();
+			daoEspacio.setConn(conn);
+
+			List<Long> espacios = daoEspacio.buscarEspaciosIdOperador(id);
+
+			listaRet.add(new Operador(id, registro, nombre, catOp, espacios, documento));		
+		}
+		return listaRet;
 	}
 
 	// RFC1

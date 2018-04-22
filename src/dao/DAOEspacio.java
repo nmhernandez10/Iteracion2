@@ -10,10 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vos.CategoriaServicio;
+import vos.Cliente;
 import vos.Espacio;
 import vos.Habitacion;
 import vos.Operador;
 import vos.RFC4;
+import vos.RFC8;
+import vos.RFC9;
 import vos.Reserva;
 import vos.Servicio;
 
@@ -59,8 +62,12 @@ public class DAOEspacio {
 			double tamaño = Double.parseDouble(rs.getString("TAMAÑO"));
 			String ubicacion = rs.getString("UBICACION");
 			double precio = Double.parseDouble(rs.getString("PRECIO"));
-			String fechaRetiro = rs.getString("FECHARETIRO");
-			
+			Date fechaRetiroD = rs.getDate("FECHARETIRO");
+			String fechaRetiro = null;
+			if(fechaRetiroD != null)
+			{
+				fechaRetiro = fechaRetiroD.toString();
+			}	
 
 			DAOHabitacion daoHabitacion = new DAOHabitacion();
 			daoHabitacion.setConn(conn);
@@ -97,7 +104,7 @@ public class DAOEspacio {
 		sql += espacio.getTamaño() + ",'";
 		sql += espacio.getUbicacion() + "',";
 		sql += espacio.getPrecio() + ",";	
-		sql += "TO_DATE('"+(espacio.getFechaRetiroDate().getDate()) + "-" + (espacio.getFechaRetiroDate().getMonth() +1) +"-" + (espacio.getFechaRetiroDate().getYear()+1900)  + "','DD-MM-YYYY'))";
+		sql += "TO_DATE('" + espacio.getFechaRetiro() + "','YYYY-MM-DD'))";
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -114,7 +121,7 @@ public class DAOEspacio {
 		sql += "tamaño = " + espacio.getTamaño() + ",";
 		sql += "direccion = '" + espacio.getUbicacion() + "',";
 		sql += "precio = " + espacio.getPrecio() + ",";		
-		sql += "fechaRetiro = TO_DATE('"+(espacio.getFechaRetiroDate().getDate()) + "-" + (espacio.getFechaRetiroDate().getMonth() +1) +"-" + (espacio.getFechaRetiroDate().getYear()+1900)  + "','DD-MM-YYYY')";
+		sql += "fechaRetiro = TO_DATE('"+ espacio.getFechaRetiro() +"','YYYY-MM-DD')";
 		sql += " WHERE id =" + espacio.getId();
 
 		System.out.println("SQL stmt:" + sql);
@@ -155,8 +162,13 @@ public class DAOEspacio {
 		double tamaño = Double.parseDouble(rs.getString("TAMAÑO"));
 		String ubicacion = rs.getString("DIRECCION");
 		double precio = Double.parseDouble(rs.getString("PRECIO"));
-		String fechaRetiro = rs.getString("FECHARETIRO");
-
+		Date fechaRetiroD = rs.getDate("FECHARETIRO");
+		String fechaRetiro = null;
+		if(fechaRetiroD != null)
+		{
+			fechaRetiro = fechaRetiroD.toString();
+		}		
+		
 		DAOHabitacion daoHabitacion = new DAOHabitacion();
 		daoHabitacion.setConn(conn);
 
@@ -311,5 +323,73 @@ public class DAOEspacio {
 		}
 		
 		return espacios;
+	}
+	
+	//RFC8
+	
+	public List<RFC8> obtenerClientesFrecuentes(long id) throws SQLException, Exception
+	{
+		List<RFC8> resultado = new ArrayList<RFC8>();
+		
+		String sql = "SELECT IDCLIENTE, DURTOTAL, CONTEO "+
+						"FROM(SELECT RESERVAS.IDCLIENTE, SUM(RESERVAS.DURACION) AS DURTOTAL, COUNT(RESERVAS.ID) AS CONTEO "+
+						"FROM RESERVAS, ESPACIOS "+
+						"WHERE RESERVAS.IDESPACIO = ESPACIOS.ID AND RESERVAS.CANCELADO = 'N' AND ESPACIOS.ID = "+id+
+						" GROUP BY RESERVAS.IDCLIENTE) "+
+						"WHERE DURTOTAL >= 15 OR CONTEO >= 3";
+		
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+		
+		DAOCliente daoCliente = new DAOCliente();
+		daoCliente.setConn(conn);
+		
+		while (rs.next()) 
+		{
+			long idCliente = Long.parseLong(rs.getString("IDCLIENTE"));
+			Cliente cliente = daoCliente.buscarCliente(idCliente);
+			int durTotal = rs.getInt("DURTOTAL");
+			int ocasiones = rs.getInt("CONTEO");
+			resultado.add(new RFC8(cliente, durTotal, ocasiones));
+		}
+		
+		return resultado;
+	}
+	
+	//RFC9
+
+	public List<RFC9> obtenerEspaciosPocoDemandados() throws SQLException, Exception
+	{
+		List<RFC9> resultado = new ArrayList<RFC9>();
+
+		String sql ="SELECT * FROM(SELECT IDESPACIO, MAX(ESPACIODIAS) AS MAXIMOPERIODO "+
+						"FROM (WITH FECHAS AS(SELECT ROWNUM AS ID, IDESPACIO, FECHAINICIO "+
+						"FROM(SELECT IDESPACIO, FECHAINICIO "+
+						"FROM RESERVAS "+
+						"WHERE RESERVAS.CANCELADO = 'N' "+
+						"ORDER BY IDESPACIO ASC, FECHAINICIO ASC)) "+
+						"SELECT T1.FECHAINICIO - T2.FECHAINICIO AS ESPACIODIAS, T1.IDESPACIO "+
+						"FROM (FECHAS)T1, (FECHAS)T2 "+
+						"WHERE T2.ID = T1.ID -1 AND T2.IDESPACIO = T1.IDESPACIO) "+
+						"GROUP BY IDESPACIO) WHERE MAXIMOPERIODO > 30";
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) 
+		{
+			long idEspacio = Long.parseLong(rs.getString("IDESPACIO"));
+			Espacio espacio = buscarEspacio(idEspacio);
+			int maxPer = rs.getInt("MAXIMOPERIODO");
+			resultado.add(new RFC9(espacio, maxPer));
+		}
+
+		return resultado;
 	}
 }

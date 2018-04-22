@@ -51,10 +51,12 @@ public class DAOReserva {
 		while (rs.next()) {
 			long id = Long.parseLong(rs.getString("ID"));
 			long idCliente = Long.parseLong(rs.getString("IDCLIENTE"));
-			long idEspacio = Long.parseLong(rs.getString("IDESPACIO"));			
-			String fechaInicio = rs.getString("FECHAINICIO");
+			long idEspacio = Long.parseLong(rs.getString("IDESPACIO"));	
+			Date fechaInicioD = rs.getDate("FECHAINICIO");
+			String fechaInicio = fechaInicioD.toString();
 			int duracion = Integer.parseInt(rs.getString("DURACION"));
-			String fechaReserva = rs.getString("FECHARESERVA");
+			Date fechaReservaD = rs.getDate("FECHARESERVA");
+			String fechaReserva = fechaReservaD.toString();
 			double precio = Double.parseDouble(rs.getString("PRECIO"));
 			boolean cancelado = false;
 			if (rs.getString("CANCELADO").equals('Y')) {
@@ -72,8 +74,8 @@ public class DAOReserva {
 		sql += reserva.getIdEspacio() + ",";
 		sql += reserva.getIdCliente() + ",";
 		sql += reserva.getDuracion() + ",";
-		sql += "TO_DATE('"+(reserva.getFechaInicioDate().getDate()) + "-" + (reserva.getFechaInicioDate().getMonth() +1) +"-" + (reserva.getFechaInicioDate().getYear()+1900)  + "','DD-MM-YYYY'),";
-		sql += "TO_DATE('"+(reserva.getFechaReservaDate().getDate()) + "-" + (reserva.getFechaReservaDate().getMonth() +1) +"-" + (reserva.getFechaReservaDate().getYear()+1900)   + "','DD-MM-YYYY'),";
+		sql += "TO_DATE('"+ reserva.getFechaInicio() + "','YYYY-MM-DD'),";
+		sql += "TO_DATE('"+ reserva.getFechaReserva() + "','YYYY-MM-DD'),";
 
 		DAOCliente daoCliente = new DAOCliente();
 		DAOEspacio daoEspacio = new DAOEspacio();
@@ -106,8 +108,8 @@ public class DAOReserva {
 		sql += "idCliente =" +reserva.getIdCliente() +",";
 		sql += "idEspacio =" +reserva.getIdEspacio() +",";
 		sql += "duracion = " + reserva.getDuracion() + ",";
-		sql += "fechaInicio = TO_DATE('"+(reserva.getFechaInicioDate().getDate()) + "-" + (reserva.getFechaInicioDate().getMonth() +1) +"-" + (reserva.getFechaInicioDate().getYear()+1900)  + "','DD-MM-YYYY'),";
-		sql += "fechaReserva = TO_DATE('"+(reserva.getFechaReservaDate().getDate()) + "-" + (reserva.getFechaReservaDate().getMonth() +1) +"-" + (reserva.getFechaReservaDate().getYear()+1900)   + "','DD-MM-YYYY'),";
+		sql += "fechaInicio = TO_DATE('"+ reserva.getFechaInicio() + "','YYYY-MM-DD'),";
+		sql += "fechaReserva = TO_DATE('"+ reserva.getFechaReserva() + "','YYYY-MM-DD'),";
 		DAOCliente daoCliente = new DAOCliente();
 		DAOEspacio daoEspacio = new DAOEspacio();
 		daoCliente.setConn(conn);
@@ -162,10 +164,11 @@ public class DAOReserva {
 		
 		long idCliente = Long.parseLong(rs.getString("IDCLIENTE"));
 		long idEspacio = Long.parseLong(rs.getString("IDESPACIO"));
-		String fechaInicio = rs.getString("FECHAINICIO");
+		Date fechaInicioD = rs.getDate("FECHAINICIO");
+		String fechaInicio = fechaInicioD.toString();
 		int duracion = Integer.parseInt(rs.getString("DURACION"));
-		String fechaReserva = rs.getString("FECHARESERVA");
-		System.out.println(fechaReserva);
+		Date fechaReservaD = rs.getDate("FECHARESERVA");
+		String fechaReserva = fechaReservaD.toString();
 		boolean cancelado = false;
 		double precio = Double.parseDouble(rs.getString("PRECIO"));
 		if (rs.getString("CANCELADO").equals("Y")) {

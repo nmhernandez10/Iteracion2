@@ -143,5 +143,5 @@ public class EspacioService {
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
-	}
+	}	
 }

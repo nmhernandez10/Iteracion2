@@ -14,6 +14,7 @@ import vos.Cliente;
 import vos.Espacio;
 import vos.Habitacion;
 import vos.Operador;
+import vos.RF7;
 import vos.RFC4;
 import vos.RFC8;
 import vos.RFC9;
@@ -277,7 +278,9 @@ public class DAOEspacio {
 	
 	public List<Espacio> obtenerEspaciosDisponibles(RFC4 rfc4) throws Exception, SQLException {
 		
-		String sql = "SELECT DISTINCT ESPACIOS.ID " +
+		String sql = "SELECT ID "+
+				"FROM(SELECT ID, COUNT(ID) AS CONTEO "+
+				"FROM(SELECT ESPACIOS.ID " +
 				"FROM ESPACIOS INNER JOIN SERVICIOS ON ESPACIOS.ID = SERVICIOS.IDESPACIO " +
 				"WHERE ESPACIOS.ID NOT IN(SELECT ID "+
 				"FROM ESPACIOS "+
@@ -328,7 +331,10 @@ public class DAOEspacio {
 		{
 			sql += ")";
 		}
-
+		
+		sql += ") GROUP BY ID)TABLACATEGORIAS "+
+				"WHERE TABLACATEGORIAS.CONTEO = " + rfc4.getServicios().size();
+		
 		System.out.println("SQL stmt:" + sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
@@ -409,6 +415,92 @@ public class DAOEspacio {
 			Espacio espacio = buscarEspacio(idEspacio);
 			int maxPer = rs.getInt("MAXIMOPERIODO");
 			resultado.add(new RFC9(espacio, maxPer));
+		}
+
+		return resultado;
+	}
+	
+	// RF7
+	
+	public List<Espacio> obtenerEspaciosRF7(RF7 rf7) throws SQLException, Exception
+	{
+		DAOCategoriaHabitacion daoCatHabitacion = new DAOCategoriaHabitacion();
+		DAOCategoriaOperador daoCatOperador = new DAOCategoriaOperador();
+		DAOCategoriaServicio daoCatServicio = new DAOCategoriaServicio();
+		
+		daoCatHabitacion.setConn(conn);
+		daoCatOperador.setConn(conn);
+		daoCatServicio.setConn(conn);
+		
+		List<Espacio> resultado = new ArrayList<Espacio>();
+
+		int numServicios = rf7.getServicios().size();
+		long idCatHabitacion = daoCatHabitacion.buscarCategoriaHabitacionNombre(rf7.getTipoHabitacion()).getId();
+		long idCatOperador = daoCatOperador.buscarCategoriaOperadorNombre(rf7.getCategoria()).getId();		
+		
+		String sql ="SELECT ID "+
+				"FROM ESPACIOS "+
+				"WHERE ID IN(SELECT TABLAESPACIOS.ID "+
+				"FROM HABITACIONES,(SELECT ESPACIOS.ID "+
+				            "FROM ESPACIOS, (SELECT * "+
+				            "FROM OPERADORES "+
+				            "WHERE IDCATEGORIA = " + idCatOperador + ") TABLAOPERADORES "+
+				            "WHERE ESPACIOS.IDOPERADOR = TABLAOPERADORES.ID) TABLAESPACIOS "+
+				            "WHERE HABITACIONES.IDESPACIO = TABLAESPACIOS.ID  AND HABITACIONES.IDCATEGORIA = "+idCatHabitacion+") "+
+				    "AND ID IN(SELECT ID "+
+				            "FROM(SELECT ID, COUNT(ID) AS CONTEO "+
+				            "FROM(SELECT TABLAESPACIOS.ID, SERVICIOS.IDCATEGORIA "+
+				            "FROM SERVICIOS,(SELECT ESPACIOS.ID "+
+				            "FROM ESPACIOS, (SELECT * "+
+				            "FROM OPERADORES "+
+				            "WHERE IDCATEGORIA = "+idCatOperador+") TABLAOPERADORES "+
+				            "WHERE ESPACIOS.IDOPERADOR = TABLAOPERADORES.ID) TABLAESPACIOS "+
+				            "WHERE SERVICIOS.IDESPACIO = TABLAESPACIOS.ID";
+		
+		if(numServicios > 0)
+		{
+			sql += " AND (";
+		}
+		
+		int contador = 0;
+		
+		for(String serV : rf7.getServicios())
+		{
+			contador ++;
+			long idCatServ = daoCatServicio.buscarCategoriaServicioNombre(serV).getId();
+			
+			if(contador == 1)
+			{
+				sql += "SERVICIOS.IDCATEGORIA = " +idCatServ;
+			}
+			else
+			{
+				sql += " OR SERVICIOS.IDCATEGORIA = " +idCatServ;
+			}
+		}
+		
+		if(numServicios > 0)
+		{
+			sql += ")";
+		}
+		
+		sql +=")TABLACATEGORIAS "+
+	            "GROUP BY TABLACATEGORIAS.ID) "+
+		            "WHERE CONTEO = "+numServicios+")";
+		
+
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) 
+		{
+			long idEspacio = Long.parseLong(rs.getString("ID"));
+			Espacio espacio = buscarEspacio(idEspacio);
+			resultado.add(espacio);
 		}
 
 		return resultado;

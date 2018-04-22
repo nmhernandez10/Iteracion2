@@ -34,6 +34,7 @@ import vos.RF2;
 import vos.RF2Habitacion;
 import vos.RF2Servicio;
 import vos.RF3;
+import vos.RF7;
 import vos.RFC1;
 import vos.RFC3;
 import vos.RFC4;
@@ -245,6 +246,7 @@ public class AlohAndesTransactionManager
 			catch(Exception e)
 			{
 				conn.rollback();
+				conn.setAutoCommit(true);
 				throw e;
 			}
 
@@ -322,7 +324,7 @@ public class AlohAndesTransactionManager
 	
 	// RF4
 
-	public void addReserva(Reserva reserva) throws Exception 
+	public void addReserva(Reserva reserva, boolean desdeRF7) throws Exception 
 	{
 		DAOReserva daoReserva = new DAOReserva();
 		DAOCliente daoCliente = new DAOCliente();
@@ -331,7 +333,11 @@ public class AlohAndesTransactionManager
 
 		try {
 			////// Transacción
-			this.conn = darConexion();
+			if(!desdeRF7)
+			{
+				this.conn = darConexion();
+			}
+			
 			daoReserva.setConn(conn);
 			daoCliente.setConn(conn);
 			daoEspacio.setConn(conn);
@@ -416,7 +422,12 @@ public class AlohAndesTransactionManager
 			}			
 
 			daoReserva.addReserva(reserva);
-			conn.commit();
+			
+			if(!desdeRF7)
+			{
+				conn.commit();
+			}
+			
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
 			e.printStackTrace();
@@ -431,7 +442,7 @@ public class AlohAndesTransactionManager
 				daoReserva.cerrarRecursos();
 				daoOperador.cerrarRecursos();
 				daoEspacio.cerrarRecursos();
-				if (this.conn != null)
+				if (this.conn != null && !desdeRF7)
 					this.conn.close();
 			} catch (SQLException exception) {
 				System.err.println("SQLException closing resources:" + exception.getMessage());
@@ -915,6 +926,103 @@ public class AlohAndesTransactionManager
 				throw exception;
 			}
 		}
+	}	
+	
+	// RF7
 
+	public List<Reserva> reservaColectiva(RF7 rf7) throws Exception
+	{
+		DAOEspacio daoEspacio = new DAOEspacio();
+		DAOReserva daoReserva = new DAOReserva();	
+		
+		String msgError = "";
+		
+		try {
+			this.conn = darConexion();
+			daoEspacio.setConn(conn);
+			daoReserva.setConn(conn);
+						
+			List<Reserva> resultado = new ArrayList<Reserva>();
+
+			List<Espacio> espaciosCandidatos = daoEspacio.obtenerEspaciosRF7(rf7);
+
+			int cantidadRestante = rf7.getCantidad();
+			
+			long idMayor = 0;
+			
+			List<Reserva> reservas = daoReserva.darReservas();
+			
+			for(Reserva reserva : reservas)
+			{
+				if(reserva.getId() > idMayor)
+				{
+					idMayor = reserva.getId();
+				}
+			}
+			
+			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+			conn.setAutoCommit(false);
+			
+			for(Espacio espacioCandidato : espaciosCandidatos)
+			{
+				int numHabitaciones = espacioCandidato.getHabitaciones().size();			
+				
+				if(cantidadRestante > 0)
+				{
+					idMayor++;
+					Reserva agregada = new Reserva(idMayor,rf7.getIdCliente(),espacioCandidato.getId(), rf7.getFechaInicio(), rf7.getDuracion(), null, false, espacioCandidato.getPrecio() * rf7.getDuracion());
+					agregada.setFechaReservaDate(new Date());
+					try
+					{
+						addReserva(agregada, true);
+						if (cantidadRestante - numHabitaciones < 0)
+						{
+							cantidadRestante = 0;
+						}
+						else
+						{
+							cantidadRestante -= numHabitaciones;
+						}
+						resultado.add(agregada);	
+					}
+					catch(Exception e)
+					{
+						msgError += "No se pudo agregar la reserva al espacio " + espacioCandidato.getId() + " porque "+e.getMessage().toLowerCase();
+					}													
+				}				
+			}
+			
+			if(cantidadRestante > 0)
+			{
+				conn.rollback();
+				conn.setAutoCommit(true);
+				throw new Exception ("No se pudo realizar la transacción. Faltaron " + cantidadRestante + " habitaciones");
+			}
+			
+			conn.commit();
+			
+			conn.setAutoCommit(true);
+			
+			return resultado;
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw new Exception (e.getMessage() + ". " + msgError);
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw new Exception (e.getMessage() + ". " + msgError);
+		} finally {
+			try {
+				daoEspacio.cerrarRecursos();
+				daoReserva.cerrarRecursos();
+				if (this.conn != null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw new Exception (exception.getMessage() + ". " + msgError);
+			}
+		}
 	}	
 }

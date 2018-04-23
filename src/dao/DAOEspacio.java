@@ -15,6 +15,7 @@ import vos.Espacio;
 import vos.Habitacion;
 import vos.Operador;
 import vos.RF7;
+import vos.RF9;
 import vos.RFC4;
 import vos.RFC8;
 import vos.RFC9;
@@ -61,7 +62,7 @@ public class DAOEspacio {
 			long registro = Long.parseLong(rs.getString("REGISTRO"));
 			int capacidad = Integer.parseInt(rs.getString("CAPACIDAD"));
 			double tamaño = Double.parseDouble(rs.getString("TAMAÑO"));
-			String ubicacion = rs.getString("UBICACION");
+			String ubicacion = rs.getString("DIRECCION");
 			double precio = Double.parseDouble(rs.getString("PRECIO"));
 			Date fechaRetiroD = rs.getDate("FECHARETIRO");
 			String fechaRetiro = null;

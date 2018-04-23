@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import vos.Cliente;
 import vos.Espacio;
+import vos.RF9;
 import vos.Reserva;
 
 public class DAOReserva {
@@ -236,5 +237,48 @@ public class DAOReserva {
 			reservas.add(idR);
 		}
 		return reservas;
+	}
+	
+	// RF9
+
+	public List<Reserva> obtenerReservasRF9(RF9 rf9) throws SQLException, Exception
+	{	
+		List<Reserva> resultado = new ArrayList<Reserva>();
+		
+		String sql = "SELECT ID, RESERVAS.FECHARESERVA "+
+				"FROM RESERVAS "+
+				"WHERE RESERVAS.IDESPACIO = "+rf9.getIdEspacio()+" AND RESERVAS.FECHAINICIO + RESERVAS.DURACION > TO_DATE('"+rf9.getFechaDeshabilitacion()+"','YYYY-MM-DD') AND RESERVAS.FECHAINICIO <= TO_DATE('"+rf9.getFechaDeshabilitacion()+"','YYYY-MM-DD') AND RESERVAS.CANCELADO = 'N' "+
+				"ORDER BY RESERVAS.FECHARESERVA ASC";
+		
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+				
+		while (rs.next()) 
+		{
+			long idReserva = Long.parseLong(rs.getString("ID"));
+			Reserva reserva = buscarReserva(idReserva);
+			resultado.add(reserva);
+		}
+		
+		sql = "SELECT ID, RESERVAS.FECHARESERVA "+
+				"FROM RESERVAS "+
+				"WHERE RESERVAS.IDESPACIO = "+rf9.getIdEspacio()+"  AND RESERVAS.FECHAINICIO > TO_DATE('"+rf9.getFechaDeshabilitacion()+"','YYYY-MM-DD') AND RESERVAS.CANCELADO = 'N' "+
+				"ORDER BY RESERVAS.FECHARESERVA ASC";
+		
+		prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		rs = prepStmt.executeQuery();
+				
+		while (rs.next()) 
+		{
+			long idReserva = Long.parseLong(rs.getString("ID"));
+			Reserva reserva = buscarReserva(idReserva);
+			resultado.add(reserva);
+		}
+		
+		return resultado;
 	}
 }

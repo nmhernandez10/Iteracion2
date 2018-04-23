@@ -59,7 +59,7 @@ public class ReservaService {
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
-			reserva = tm.cancelarReserva(reserva);
+			reserva = tm.cancelarReserva(reserva, false);
 			return Response.status(200).entity(reserva).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();

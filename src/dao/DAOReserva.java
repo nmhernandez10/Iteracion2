@@ -52,7 +52,16 @@ public class DAOReserva {
 		while (rs.next()) {
 			long id = Long.parseLong(rs.getString("ID"));
 			long idCliente = Long.parseLong(rs.getString("IDCLIENTE"));
-			long idEspacio = Long.parseLong(rs.getString("IDESPACIO"));	
+			long idEspacio = Long.parseLong(rs.getString("IDESPACIO"));
+			long idColectiva;
+			if(rs.getString("IDCOLECTIVA") == null)
+			{
+				idColectiva = 0;
+			}
+			else
+			{
+				idColectiva = Long.parseLong(rs.getString("IDESPACIO"));	
+			}
 			Date fechaInicioD = rs.getDate("FECHAINICIO");
 			String fechaInicio = fechaInicioD.toString();
 			int duracion = Integer.parseInt(rs.getString("DURACION"));
@@ -63,17 +72,25 @@ public class DAOReserva {
 			if (rs.getString("CANCELADO").equals('Y')) {
 				cancelado = true;
 			}
-			reservas.add(new Reserva(id,idCliente, idEspacio, fechaInicio, duracion, fechaReserva, cancelado, precio));
+			reservas.add(new Reserva(id,idCliente, idEspacio, idColectiva, fechaInicio, duracion, fechaReserva, cancelado, precio));
 		}
 		return reservas;
 	}
 
 	public void addReserva(Reserva reserva) throws SQLException, Exception
 	{
-		String sql = "INSERT INTO RESERVAS (id, idEspacio, idCliente, duracion, fechaInicio, fechaReserva, precio, cancelado) VALUES (";
+		String sql = "INSERT INTO RESERVAS (id, idEspacio, idCliente, idColectiva, duracion, fechaInicio, fechaReserva, precio, cancelado) VALUES (";
 		sql += reserva.getId() + ",";
 		sql += reserva.getIdEspacio() + ",";
 		sql += reserva.getIdCliente() + ",";
+		if(reserva.getIdColectiva() == 0)
+		{
+			sql += "null,";
+		}
+		else
+		{
+			sql += reserva.getIdColectiva() + ",";
+		}		
 		sql += reserva.getDuracion() + ",";
 		sql += "TO_DATE('"+ reserva.getFechaInicio() + "','YYYY-MM-DD'),";
 		sql += "TO_DATE('"+ reserva.getFechaReserva() + "','YYYY-MM-DD'),";
@@ -108,6 +125,14 @@ public class DAOReserva {
 		String sql = "UPDATE RESERVAS SET ";
 		sql += "idCliente =" +reserva.getIdCliente() +",";
 		sql += "idEspacio =" +reserva.getIdEspacio() +",";
+		if(reserva.getIdColectiva() == 0)
+		{
+			sql += "idColectiva = null,";
+		}
+		else
+		{
+			sql += "idColectiva = " + reserva.getIdColectiva() + ",";
+		}
 		sql += "duracion = " + reserva.getDuracion() + ",";
 		sql += "fechaInicio = TO_DATE('"+ reserva.getFechaInicio() + "','YYYY-MM-DD'),";
 		sql += "fechaReserva = TO_DATE('"+ reserva.getFechaReserva() + "','YYYY-MM-DD'),";
@@ -165,6 +190,15 @@ public class DAOReserva {
 		
 		long idCliente = Long.parseLong(rs.getString("IDCLIENTE"));
 		long idEspacio = Long.parseLong(rs.getString("IDESPACIO"));
+		long idColectiva;
+		if(rs.getString("IDCOLECTIVA") == null)
+		{
+			idColectiva = 0;
+		}
+		else
+		{
+			idColectiva = Long.parseLong(rs.getString("IDESPACIO"));	
+		}
 		Date fechaInicioD = rs.getDate("FECHAINICIO");
 		String fechaInicio = fechaInicioD.toString();
 		int duracion = Integer.parseInt(rs.getString("DURACION"));
@@ -176,7 +210,7 @@ public class DAOReserva {
 			cancelado = true;
 		}
 
-		return new Reserva(id, idCliente, idEspacio, fechaInicio, duracion, fechaReserva, cancelado, precio);
+		return new Reserva(id, idCliente, idEspacio, idColectiva, fechaInicio, duracion, fechaReserva, cancelado, precio);
 	}
 	
 	public ArrayList<Long> buscarReservasIdClienteIdEspacio(long idCliente, long idEspacio) throws SQLException, Exception {
@@ -235,6 +269,26 @@ public class DAOReserva {
 			long idR = Long.parseLong(rs.getString("ID"));
 
 			reservas.add(idR);
+		}
+		return reservas;
+	}
+	
+	public List<Reserva> buscarReservasIdColectiva(long idColectiva) throws SQLException, Exception {
+
+		List<Reserva> reservas = new ArrayList<Reserva>();
+
+		String sql = "SELECT * FROM RESERVAS WHERE IDCOLECTIVA = " + idColectiva;
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) {
+			long idR = Long.parseLong(rs.getString("ID"));
+			Reserva reserva = buscarReserva(idR);
+			reservas.add(reserva);
 		}
 		return reservas;
 	}

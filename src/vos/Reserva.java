@@ -22,6 +22,9 @@ public class Reserva {
 
 	@JsonProperty(value = "idEspacio")
 	private long idEspacio;
+	
+	@JsonProperty(value = "idColectiva")
+	private long idColectiva;
 
 	@JsonProperty(value = "fechaInicio")
 	private String fechaInicio;
@@ -43,12 +46,13 @@ public class Reserva {
 	private double precio;
 
 	public Reserva(@JsonProperty(value = "id") long id, @JsonProperty(value = "idCliente") long idCliente, @JsonProperty(value = "idEspacio") long idEspacio,
-			@JsonProperty(value = "fechaInicio") String fechaInicio, @JsonProperty(value = "duracion") int duracion,
+			@JsonProperty(value = "idColectiva") long idColectiva, @JsonProperty(value = "fechaInicio") String fechaInicio, @JsonProperty(value = "duracion") int duracion,
 			@JsonProperty(value = "fechaReserva") String fechaReserva,
 			@JsonProperty(value = "cancelado") boolean cancelado, @JsonProperty(value = "precio") double precio) {
 		this.id = id;
 		this.idCliente = idCliente;
 		this.idEspacio = idEspacio;
+		this.idColectiva = idColectiva;
 		this.fechaInicio = fechaInicio;
 		this.duracion = duracion;
 		this.fechaReserva = fechaReserva;
@@ -82,6 +86,14 @@ public class Reserva {
 	
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getIdColectiva() {
+		return idColectiva;
+	}
+
+	public void setIdColectiva(long idColectiva) {
+		this.idColectiva = idColectiva;
 	}
 
 	public double getPrecio() {
@@ -199,11 +211,11 @@ public class Reserva {
 		this.fechaReserva =  (this.fechaReservaDate.getYear() +1900) + "-" + (this.fechaReservaDate.getMonth() +1) +"-" + this.fechaReservaDate.getDate();
 	}	
 	
-	public boolean isVigente(Date fechaAnalizada)
+	public boolean isVigente(Date fechaInicioAnalizada, Date fechaFinalAnalizada)
 	{
 		boolean rpta = false;
 		
-		if(!isCancelado() && getFechaInicioDate().before(fechaAnalizada) && calcularFechaFin().after(fechaAnalizada))
+		if(!isCancelado() && getFechaInicioDate().before(fechaFinalAnalizada) && calcularFechaFin().after(fechaInicioAnalizada))
 		{
 			rpta = true;
 		}

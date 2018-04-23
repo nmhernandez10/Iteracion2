@@ -103,7 +103,7 @@ public class EspacioService {
 
 		try {
 			
-			espacio = tm.cancelarEspacio(espacio, espacio.getFechaRetiroDate());
+			espacio = tm.cancelarEspacio(espacio, espacio.getFechaRetiroDate(), false);
 			return Response.status(200).entity(espacio).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();

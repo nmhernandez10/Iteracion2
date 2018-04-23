@@ -841,23 +841,58 @@ public class AlohAndesTransactionManager
 		}
 	}
 
-	//RFC7
-	public List<Date> analizarOperacion(RFC7 rfc7) throws Exception {
+	// RFC7
+	
+	public List<String> analizarOperacion(RFC7 rfc7) throws Exception {
 		DAOOperador daoOperador = new DAOOperador();
 		DAOReserva daoReserva = new DAOReserva();
-
-		RFC7 resultado = rfc7;
+		DAOCategoriaOperador daoCatOperador = new DAOCategoriaOperador();
+		
 		try {
 			this.conn = darConexion();
 			daoOperador.setConn(conn);
 			daoReserva.setConn(conn);
+			daoCatOperador.setConn(conn);
+			
+			long idCatOperador = 0;			
+			
+			idCatOperador = daoCatOperador.buscarCategoriaOperadorNombre(rfc7.getCategoria()).getId();			
+			
+			List<Reserva> analizadas = daoReserva.buscarReservasIdCategoriaOperador(idCatOperador);
+			
+			List<String> resultados = new ArrayList<String>();
+			
+			int diaMejor = 0;
+			double mejorValor = 0;
+			int mesMejor = 0;
+			int añoMejor = 0;
+			//AQUÍVOY
+			if(rfc7.getTimeUnit().equalsIgnoreCase("DÍA"))
+			{
+				for(reservas)
+			}
 
-			ArrayList<Operador> listaOperadores = (ArrayList<Operador>)daoOperador.buscarOperadoresPorCategoria(rfc7.getcategoria());
-		}
-		catch (Exception e) {
+			return resultados;
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
 			e.printStackTrace();
-		}
-		return null;
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoEspacio.cerrarRecursos();
+				if (this.conn != null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}	
+		
 	}
 	
 	// RFC8

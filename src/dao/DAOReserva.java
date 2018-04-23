@@ -239,6 +239,28 @@ public class DAOReserva {
 		return reservas;
 	}
 	
+	public List<Reserva> buscarReservasIdCategoriaOperador(long idCatOperador) throws SQLException, Exception {
+
+		List<Reserva> reservas = new ArrayList<Reserva>();
+
+		String sql ="SELECT RESERVAS.ID "+
+					"FROM RESERVAS, ESPACIOS, OPERADORES "+
+					"WHERE RESERVAS.IDESPACIO = ESPACIOS.ID AND ESPACIOS.IDOPERADOR = OPERADORES.ID AND OPERADORES.IDCATEGORIA = "+idCatOperador;
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) {
+			long idR = Long.parseLong(rs.getString("ID"));
+
+			reservas.add(buscarReserva(idR));
+		}
+		return reservas;
+	}
+	
 	// RF9
 
 	public List<Reserva> obtenerReservasRF9(RF9 rf9) throws SQLException, Exception

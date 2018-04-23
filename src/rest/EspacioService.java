@@ -25,6 +25,7 @@ import vos.ListaRFC8;
 import vos.ListaRFC9;
 import vos.RF2;
 import vos.RF3;
+import vos.RF9;
 import vos.RFC4;
 
 @Path("espacios")
@@ -102,7 +103,7 @@ public class EspacioService {
 
 		try {
 			
-			espacio = tm.cancelarEspacio(espacio, espacio.getFechaRetiroDate());
+			espacio = tm.cancelarEspacio(espacio, espacio.getFechaRetiroDate(), false);
 			return Response.status(200).entity(espacio).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -132,7 +133,7 @@ public class EspacioService {
 	@GET
 	@Path("/espaciosPocoDemandados")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response espacios() 
+	public Response espaciosPocoDemandados() 
 	{
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
@@ -140,6 +141,23 @@ public class EspacioService {
 
 			ListaRFC9 espacios = tm.espaciosPocoDemandados();
 			return Response.status(200).entity(espacios).build();
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+	}	
+	
+	@PUT
+	@Path("/deshabilitarEspacio")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deshabilitarEspacio(RF9 rf9)
+	{
+		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
+
+		try {
+
+			List<String> resultados = tm.deshabilitarEspacio(rf9);
+			return Response.status(200).entity(resultados).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}

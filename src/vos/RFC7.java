@@ -17,42 +17,20 @@ public class RFC7
 	/**
 	 * Unidad de tiempo en días. Para representar semana, se usa 7. Para representar mes, se usa 30 o 31. 
 	 */
-	private int timeUnit;
+	private String timeUnit;
 	
-	/**
-	 * La lista de fechas a retornar. 
-	 */
-	private List<Date> fechasARetornar;
-	
-	public RFC7(@JsonProperty(value = "categoria") String categoria, @JsonProperty(value = "timeUnit") int timeUnit) {
+	public RFC7(@JsonProperty(value = "categoria") String categoria, @JsonProperty(value = "timeUnit") String timeUnit) {
 		this.categoria = categoria;
 		this.timeUnit = timeUnit;
-		this.setFechasARetornar(new ArrayList<Date>());
 	}
 
-	public String getcategoria() {
+	public String getCategoria() {
 		return categoria;
 	}
 
-	public int gettimeUnit() {
+	public String getTimeUnit() {
 		return timeUnit;
 	}
-
-	/**
-	 * @return the fechasARetornar
-	 */
-	public List<Date> getFechasARetornar() {
-		return fechasARetornar;
-	}
-
-	/**
-	 * @param fechasARetornar the fechasARetornar to set
-	 */
-	public void setFechasARetornar(List<Date> fechasARetornar) {
-		this.fechasARetornar = fechasARetornar;
-	}
-	
-	
 	
 	//NO SE PUEDEN EDITAR LAS ATRIBUTOS CON LOS MÉTODOS 'SET' DADO QUE SÓLO SE USA INSTANCIAS
 	//DE ESTA CLASE PARA SOLUCIONAR UN REQUERIMIENTO SEGÚN ALGO ENTRADO POR PARÁMETRO EN EL RECURSO

@@ -1,5 +1,7 @@
 package rest;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -73,8 +75,14 @@ public class GeneralService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response analizarOperacion(RFC7 rfc7) throws Exception {
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
-		tm.analizarOperacion(rfc7);
-		return null;
+
+		try 
+		{
+			List<String> resultados = tm.analizarOperacion(rfc7);
+			return Response.status(200).entity(resultados).build();
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
 		
 	}
 	

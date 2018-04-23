@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import tm.AlohAndesTransactionManager;
+import vos.ListaReservas;
+import vos.RF7;
 import vos.Reserva;
 
 @Path("reservas")
@@ -40,7 +42,7 @@ public class ReservaService {
 		{
 			System.out.println(reserva.getFechaInicio());
 			System.out.println(reserva.getFechaReserva());
-			tm.addReserva(reserva);
+			tm.addReserva(reserva, false);
 			return Response.status(200).entity(reserva).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -57,8 +59,26 @@ public class ReservaService {
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
-			reserva = tm.cancelarReserva(reserva);
+			reserva = tm.cancelarReserva(reserva, false);
 			return Response.status(200).entity(reserva).build();
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+	}
+	
+	// RF7
+	
+	@PUT
+	@Path("/reservaColectiva")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response reservaColectiva(RF7 rf7)
+	{
+		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
+
+		try {
+			ListaReservas reservas = new ListaReservas(tm.reservaColectiva(rf7));
+			return Response.status(200).entity(reservas).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}

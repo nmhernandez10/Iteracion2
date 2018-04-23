@@ -198,4 +198,16 @@ public class Reserva {
 		this.fechaReservaDate = fechaReservaDate;
 		this.fechaReserva =  (this.fechaReservaDate.getYear() +1900) + "-" + (this.fechaReservaDate.getMonth() +1) +"-" + this.fechaReservaDate.getDate();
 	}	
+	
+	public boolean isVigente(Date fechaAnalizada)
+	{
+		boolean rpta = false;
+		
+		if(!isCancelado() && getFechaInicioDate().before(fechaAnalizada) && calcularFechaFin().after(fechaAnalizada))
+		{
+			rpta = true;
+		}
+		
+		return rpta;
+	}
 }

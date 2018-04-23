@@ -8,15 +8,10 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class RFC7 
 {
-	/**
-	 * Tipo de alojamiento (tipo de espacio) 
-	 */
 	@JsonProperty(value = "categoria")
 	private String categoria;
-	
-	/**
-	 * Unidad de tiempo en días. Para representar semana, se usa 7. Para representar mes, se usa 30 o 31. 
-	 */
+
+	@JsonProperty(value = "timeUnit")
 	private String timeUnit;
 	
 	public RFC7(@JsonProperty(value = "categoria") String categoria, @JsonProperty(value = "timeUnit") String timeUnit) {

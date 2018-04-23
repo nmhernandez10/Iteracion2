@@ -6,6 +6,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -79,6 +80,23 @@ public class ReservaService {
 		try {
 			ListaReservas reservas = new ListaReservas(tm.reservaColectiva(rf7));
 			return Response.status(200).entity(reservas).build();
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+	}
+	
+	// RF8
+	
+	@DELETE
+	@Path("/cancelarReservaColectiva/" + "{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response cancelarReservaColectiva(@PathParam("id") String idS) {
+		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
+
+		try {
+			long id = Long.parseLong(idS);
+			String resultado = tm.cancelarReservaColectiva(id);
+			return Response.status(200).entity(resultado).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}

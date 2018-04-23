@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -28,6 +30,7 @@ import vos.Espacio;
 import vos.Habitacion;
 import vos.ListaRFC8;
 import vos.ListaRFC9;
+import vos.ListaReservas;
 import vos.Operador;
 import vos.RF1;
 import vos.RF2;
@@ -854,6 +857,11 @@ public class AlohAndesTransactionManager
 			daoReserva.setConn(conn);
 			daoCatOperador.setConn(conn);
 			
+			if(!rfc7.getTimeUnit().equalsIgnoreCase("DÍA") && !rfc7.getTimeUnit().equalsIgnoreCase("SEMANA") && !rfc7.getTimeUnit().equalsIgnoreCase("MES") && !rfc7.getTimeUnit().equalsIgnoreCase("AÑO") )
+			{
+				throw new Exception("Ingrese una unidad de tiempo válida entre: día, mes, semana y año");
+			}
+			
 			long idCatOperador = 0;			
 			
 			idCatOperador = daoCatOperador.buscarCategoriaOperadorNombre(rfc7.getCategoria()).getId();			
@@ -862,16 +870,128 @@ public class AlohAndesTransactionManager
 			
 			List<String> resultados = new ArrayList<String>();
 			
-			int diaMejor = 0;
-			double mejorValor = 0;
-			int mesMejor = 0;
-			int añoMejor = 0;
-			//AQUÍVOY
+			Date mejorFechaDemanda = new Date();
+			Date mejorFechaIngresos = new Date();
+			Date mejorFechaOcupacion = new Date();
+			
+			double mejorValorDemanda = 0;
+			double mejorValorIngresos = 0;
+			double menorOcupacion = 1;
+			
+			Date fechaMenor = new Date();
+			Date fechaMayor = new Date();
+			
+			for(Reserva reserva : analizadas)
+			{
+				if(reserva.getFechaInicioDate().before(fechaMenor))
+				{
+					fechaMenor = agregarMes(reserva.getFechaInicioDate(), -reserva.getFechaInicioDate().getMonth()) ;
+					fechaMenor = agregarDía(fechaMenor, -(reserva.getFechaInicioDate().getDate() -1)) ;
+				}
+				
+				if(reserva.calcularFechaFin().after(fechaMayor))
+				{
+					fechaMayor = agregarMes(reserva.getFechaInicioDate(), 13 - reserva.getFechaInicioDate().getMonth()) ;
+					fechaMayor = agregarDía(fechaMenor, (31-reserva.getFechaInicioDate().getDate())) ;
+				}
+			}		
+			
+			while(fechaMenor.before(fechaMayor))
+			{
+				double puntajeDemanda = 0;
+				int puntajeIngresos = 0;
+				
+				Date fechaMenorPlazo = new Date();
+				
+				if(rfc7.getTimeUnit().equalsIgnoreCase("DÍA"))
+				{
+					fechaMenorPlazo = agregarDía(fechaMenor, 1);
+				}
+				else if(rfc7.getTimeUnit().equalsIgnoreCase("SEMANA"))
+				{
+					fechaMenorPlazo = agregarSemana(fechaMenor, 1);
+				}
+				else if(rfc7.getTimeUnit().equalsIgnoreCase("MES"))
+				{
+					fechaMenorPlazo = agregarMes(fechaMenor, 1);
+				}
+				else if(rfc7.getTimeUnit().equalsIgnoreCase("AÑO"))
+				{
+					fechaMenorPlazo = agregarAño(fechaMenor, 1);
+				}
+				
+				for(Reserva reserva : analizadas)
+				{
+					
+					if(reserva.isVigente(fechaMenor, fechaMenorPlazo))
+					{
+						puntajeDemanda++;
+						puntajeIngresos += reserva.getPrecio();
+					}
+				}
+
+				if(puntajeDemanda > mejorValorDemanda)
+				{
+					mejorValorDemanda = puntajeDemanda;
+					mejorFechaDemanda = fechaMenor;
+				}
+				if(puntajeIngresos > mejorValorIngresos)
+				{
+					mejorValorIngresos = puntajeIngresos;
+					mejorFechaIngresos = fechaMenor;
+				}
+				if(puntajeDemanda > 0)
+				{
+					if((puntajeDemanda/analizadas.size()) < menorOcupacion)
+					{
+						menorOcupacion = puntajeDemanda/analizadas.size();
+						mejorFechaOcupacion = fechaMenor;
+					}
+				}				
+				
+				if(rfc7.getTimeUnit().equalsIgnoreCase("DÍA"))
+				{
+					fechaMenor = agregarDía(fechaMenor, 1);
+				}
+				else if(rfc7.getTimeUnit().equalsIgnoreCase("SEMANA"))
+				{
+					fechaMenor = agregarSemana(fechaMenor, 1);
+				}
+				else if(rfc7.getTimeUnit().equalsIgnoreCase("MES"))
+				{
+					fechaMenor = agregarMes(fechaMenor, 1);
+				}
+				else if(rfc7.getTimeUnit().equalsIgnoreCase("AÑO"))
+				{
+					fechaMenor = agregarAño(fechaMenor, 1);
+				}
+			}			
+			
 			if(rfc7.getTimeUnit().equalsIgnoreCase("DÍA"))
 			{
-				for(reservas)
+				resultados.add("El día " + mejorFechaDemanda.toString() + " es el de mayor demanda con " + mejorValorDemanda + " reservas");
+				resultados.add("El día " + mejorFechaIngresos.toString() + " es el de mayor ingresos con " + mejorValorIngresos + " COP");
+				resultados.add("El día " + mejorFechaOcupacion.toString() + " es el de menor ocupación con un " + (menorOcupacion*100) + "%");
 			}
-
+			else if(rfc7.getTimeUnit().equalsIgnoreCase("SEMANA"))
+			{
+				resultados.add("La semana del " + mejorFechaDemanda.toString() + " es el de mayor demanda con " + mejorValorDemanda + " reservas");
+				resultados.add("La semana del " + mejorFechaIngresos.toString() + " es el de mayor ingresos con " + mejorValorIngresos + " COP");
+				resultados.add("La semana del " + mejorFechaOcupacion.toString() + " es el de menor ocupación con un " + (menorOcupacion*100) + "%");
+			}
+			else if(rfc7.getTimeUnit().equalsIgnoreCase("MES"))
+			{
+				resultados.add("El mes " + (mejorFechaDemanda.getMonth() +1)+ " del "+ (mejorFechaDemanda.getYear() + 1900) +" es el de mayor demanda con " + mejorValorDemanda + " reservas");
+				resultados.add("El mes " + (mejorFechaIngresos.getMonth() +1) + " del "+ (mejorFechaIngresos.getYear() + 1900) +" es el de mayor ingresos con " + mejorValorIngresos + " COP");
+				resultados.add("El mes " + (mejorFechaOcupacion.getMonth() +1) + " del "+ (mejorFechaOcupacion.getYear() + 1900) +" es el de menor ocupación con un " + (menorOcupacion*100) + "%");
+			}
+			else if(rfc7.getTimeUnit().equalsIgnoreCase("AÑO"))
+			{
+				resultados.add("El año " + (mejorFechaDemanda.getYear() + 1900) + " es el de mayor demanda con " + mejorValorDemanda + " reservas");
+				resultados.add("El año " + (mejorFechaIngresos.getYear() +1900) + " es el de mayor ingresos con " + mejorValorIngresos + " COP");
+				resultados.add("El año " + (mejorFechaOcupacion.getYear() + 1900) + " es el de menor ocupación con un " + (menorOcupacion*100) + "%");
+			}
+			
 			return resultados;
 		} catch (SQLException e) {
 			System.err.println("SQLException:" + e.getMessage());
@@ -883,7 +1003,9 @@ public class AlohAndesTransactionManager
 			throw e;
 		} finally {
 			try {
-				daoEspacio.cerrarRecursos();
+				daoReserva.cerrarRecursos();
+				daoCatOperador.cerrarRecursos();
+				daoOperador.cerrarRecursos();
 				if (this.conn != null)
 					this.conn.close();
 			} catch (SQLException exception) {
@@ -997,6 +1119,7 @@ public class AlohAndesTransactionManager
 			int cantidadRestante = rf7.getCantidad();
 			
 			long idMayor = 0;
+			long idColectivaMayor = 0;
 			
 			List<Reserva> reservas = daoReserva.darReservas();
 			
@@ -1006,7 +1129,13 @@ public class AlohAndesTransactionManager
 				{
 					idMayor = reserva.getId();
 				}
+				if(reserva.getIdColectiva() > idColectivaMayor)
+				{
+					idColectivaMayor = reserva.getIdColectiva();
+				}
 			}
+			
+			idColectivaMayor ++;
 			
 			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			conn.setAutoCommit(false);
@@ -1018,7 +1147,7 @@ public class AlohAndesTransactionManager
 				if(cantidadRestante > 0)
 				{
 					idMayor++;
-					Reserva agregada = new Reserva(idMayor,rf7.getIdCliente(),espacioCandidato.getId(), rf7.getFechaInicio(), rf7.getDuracion(), null, false, espacioCandidato.getPrecio() * rf7.getDuracion());
+					Reserva agregada = new Reserva(idMayor,rf7.getIdCliente(),espacioCandidato.getId(), idColectivaMayor, rf7.getFechaInicio(), rf7.getDuracion(), null, false, espacioCandidato.getPrecio() * rf7.getDuracion());
 					agregada.setFechaReservaDate(new Date());
 					try
 					{
@@ -1035,7 +1164,7 @@ public class AlohAndesTransactionManager
 					}
 					catch(Exception e)
 					{
-						msgError += "No se pudo agregar la reserva al espacio " + espacioCandidato.getId() + " porque "+e.getMessage().toLowerCase();
+						msgError += "No se pudo agregar la reserva al espacio " + espacioCandidato.getId() + " porque "+e.getMessage().toLowerCase() +". ";
 					}													
 				}				
 			}
@@ -1095,8 +1224,6 @@ public class AlohAndesTransactionManager
 			List<Espacio> espaciosNuevos = daoEspacio.darEspacios();
 			
 			conn.setAutoCommit(false);
-			
-			
 			
 			long idMayor = 0;
 			
@@ -1187,6 +1314,7 @@ public class AlohAndesTransactionManager
 		} finally {
 			try {
 				daoEspacio.cerrarRecursos();
+				daoReserva.cerrarRecursos();
 				if (this.conn != null)
 					this.conn.close();
 			} catch (SQLException exception) {
@@ -1195,5 +1323,173 @@ public class AlohAndesTransactionManager
 				throw exception;
 			}
 		}
-	}	
+	}
+	
+	// RF10
+	
+	public String habilitarEspacio(Long id) throws Exception {
+		DAOEspacio daoEspacio = new DAOEspacio();
+
+		try {
+			this.conn = darConexion();
+			daoEspacio.setConn(conn);
+			
+			Espacio habilitado = daoEspacio.buscarEspacio(id);
+			
+			habilitado.setFechaRetiro(null);
+			
+			daoEspacio.updateEspacio(habilitado);
+			
+			conn.commit();
+			
+			return 	"El espacio fue habilitado satisfactoriamente";	
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} finally {
+			try {
+				daoEspacio.cerrarRecursos();
+				if (this.conn != null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+	}
+	
+	// RF8
+	
+	public String cancelarReservaColectiva(long id) throws Exception 
+	{
+		DAOEspacio daoEspacio = new DAOEspacio();
+		DAOReserva daoReserva = new DAOReserva();	
+		
+		String msgError = "";
+		
+		try {
+			this.conn = darConexion();
+			daoEspacio.setConn(conn);
+			daoReserva.setConn(conn);
+			
+			List<Reserva> reservas = daoReserva.buscarReservasIdColectiva(id);
+			
+			int cantidadRestante = reservas.size();
+			
+			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+			conn.setAutoCommit(false);
+			
+			String resultado = "";
+			
+			int contador = 0;
+			
+			for(Reserva reserva : reservas)
+			{
+				contador ++;
+				if(contador == reservas.size())
+				{
+					resultado += reserva.getId();
+				}
+				else if (contador == reservas.size() - 1)
+				{
+					resultado += reserva.getId() + " y ";
+				}
+				else
+				{
+					resultado += reserva.getId() + ", ";
+				}
+				
+				try
+				{					
+					cancelarReserva(reserva, true);
+					cantidadRestante --;
+				}
+				catch(Exception e)
+				{
+					msgError += "No se pudo cancelar la reserva con el id " + reserva.getId() + ". ";
+				}							
+			}
+			
+			if(cantidadRestante > 0)
+			{
+				resultado += "No pudo cancelarse las reservas " + resultado + " que son las que pertenecen a la reserva colectiva " + id;
+				conn.rollback();
+				conn.setAutoCommit(true);
+				throw new Exception ("No se pudo realizar la transacción. Faltaron " + cantidadRestante + " habitaciones");
+			}
+			else
+			{
+				resultado += "Se cancelaron satisfactoriamente las reservas " + resultado + " que son las pertenecientes a la reserva colectiva " + id;
+			}
+			
+			conn.commit();
+			
+			conn.setAutoCommit(true);
+			
+			return resultado;
+		} catch (SQLException e) {
+			System.err.println("SQLException:" + e.getMessage());
+			e.printStackTrace();
+			throw new Exception (e.getMessage() + ". " + msgError);
+		} catch (Exception e) {
+			System.err.println("GeneralException:" + e.getMessage());
+			e.printStackTrace();
+			throw new Exception (e.getMessage() + ". " + msgError);
+		} finally {
+			try {
+				daoEspacio.cerrarRecursos();
+				daoReserva.cerrarRecursos();
+				if (this.conn != null)
+					this.conn.close();
+			} catch (SQLException exception) {
+				System.err.println("SQLException closing resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw new Exception (exception.getMessage() + ". " + msgError);
+			}
+		}
+	}
+	
+	public Date agregarMes(Date fecha, int cantidad)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha);
+		calendar.add(Calendar.MONTH, cantidad);
+
+		return calendar.getTime();
+	}
+	
+	public Date agregarDía(Date fecha, int cantidad)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha);
+		calendar.add(Calendar.DAY_OF_YEAR, cantidad);
+
+		return calendar.getTime();
+	}
+	
+	public Date agregarAño(Date fecha, int cantidad)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha);
+		calendar.add(Calendar.YEAR, cantidad);
+
+		return calendar.getTime();
+	}
+	
+	public Date agregarSemana(Date fecha, int cantidad)
+	{
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha);
+		calendar.add(Calendar.WEEK_OF_YEAR, cantidad);
+
+		return calendar.getTime();
+	}
+
+	
 }

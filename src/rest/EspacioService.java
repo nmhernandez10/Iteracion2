@@ -162,4 +162,20 @@ public class EspacioService {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 	}
+	
+	@PUT
+	@Path("/habilitarEspacio/" + "{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response habilitarEspacio(@PathParam("id") String idS)
+	{
+		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
+
+		try {
+			Long id = Long.parseLong(idS);
+			String resultados = tm.habilitarEspacio(id);
+			return Response.status(200).entity(resultados).build();
+		} catch (Exception e) {
+			return Response.status(500).entity(doErrorMessage(e)).build();
+		}
+	}
 }

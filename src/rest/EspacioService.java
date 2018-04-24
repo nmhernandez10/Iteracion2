@@ -102,7 +102,6 @@ public class EspacioService {
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
-			
 			espacio = tm.cancelarEspacio(espacio, espacio.getFechaRetiroDate(), false);
 			return Response.status(200).entity(espacio).build();
 		} catch (Exception e) {

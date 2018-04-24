@@ -55,9 +55,25 @@ public class DAOOperador {
 
 		while (rs.next()) {
 			long id = Long.parseLong(rs.getString("ID"));
-			long documento = Long.parseLong(rs.getString("DOCUMENTO"));
+			long documento;
+			if(rs.getString("DOCUMENTO") == null)
+			{
+				documento = 0;
+			}
+			else
+			{
+				documento = Long.parseLong(rs.getString("DOCUMENTO"));
+			}
 			String nombre = rs.getString("NOMBRE");
-			long registro = Integer.parseInt(rs.getString("REGISTRO"));
+			long registro;
+			if(rs.getString("REGISTRO") == null)
+			{
+				registro = 0;
+			}
+			else
+			{
+				registro = Long.parseLong(rs.getString("REGISTRO"));
+			}
 			DAOCategoriaOperador daoCategoriaOperador = new DAOCategoriaOperador();			
 			daoCategoriaOperador.setConn(conn);		
 			CategoriaOperador categoria = daoCategoriaOperador.buscarCategoriaOperador(Long.parseLong(rs.getString("IDCATEGORIA")));			
@@ -79,8 +95,22 @@ public class DAOOperador {
 		sql += operador.getId() + ",";
 		sql += operador.getCategoria().getId() + ",'";
 		sql += operador.getNombre() + "',";
-		sql += operador.getRegistro() + ",";
-		sql += operador.getDocumento() + ")";
+		if(operador.getRegistro() == 0)
+		{
+			sql += "null,";
+		}
+		else
+		{
+			sql += operador.getRegistro() + ",";
+		}
+		if(operador.getDocumento() == 0)
+		{
+			sql += "null)";
+		}
+		else
+		{
+			sql += operador.getDocumento() + ")";
+		}
 
 
 		System.out.println("SQL stmt:" + sql);
@@ -92,10 +122,24 @@ public class DAOOperador {
 	}
 
 	public void updateOperador(Operador operador) throws SQLException, Exception {
-		String sql = "UPDATE OPERADORES SET ";
-		sql += "documento = " + operador.getDocumento() + ",";
+		String sql = "UPDATE OPERADORES SET ";		
 		sql += "nombre = '" + operador.getNombre() + "',";
-		sql += "registro = " + operador.getRegistro() + ",";
+		if(operador.getRegistro() == 0)
+		{
+			sql += "registro = null,";
+		}
+		else
+		{
+			sql += "registro = " + operador.getRegistro() + ",";
+		}
+		if(operador.getDocumento() == 0)
+		{
+			sql += "documento = null)";
+		}
+		else
+		{
+			sql += "documento = " + operador.getDocumento() + ",";
+		}
 		sql += "idCategoria = " + operador.getCategoria().getId();
 		sql += " WHERE ID = " + operador.getId();
 
@@ -133,9 +177,25 @@ public class DAOOperador {
 			throw new Exception ("No se encontró ningún operador con el id = "+id);
 		}
 
-		long documento = Long.parseLong(rs.getString("DOCUMENTO"));
+		long documento;
+		if(rs.getString("DOCUMENTO") == null)
+		{
+			documento = 0;
+		}
+		else
+		{
+			documento = Long.parseLong(rs.getString("DOCUMENTO"));
+		}
 		String nombre = rs.getString("NOMBRE");
-		long registro = Long.parseLong(rs.getString("REGISTRO"));
+		long registro;
+		if(rs.getString("REGISTRO") == null)
+		{
+			registro = 0;
+		}
+		else
+		{
+			registro = Long.parseLong(rs.getString("REGISTRO"));
+		}
 		DAOCategoriaOperador daoCategoriaOperador = new DAOCategoriaOperador();			
 		daoCategoriaOperador.setConn(conn);		
 		CategoriaOperador categoria = daoCategoriaOperador.buscarCategoriaOperador(Long.parseLong(rs.getString("IDCATEGORIA")));			

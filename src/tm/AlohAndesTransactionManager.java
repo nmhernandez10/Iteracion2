@@ -176,6 +176,16 @@ public class AlohAndesTransactionManager
 				throw new Exception("No puede haber un espacio con tamaño menor o igual a 0");
 			}
 			
+			if(transformarFecha(rf2.getFechaRetiro()).before(new Date()))
+			{
+				throw new Exception("No puede agregar un espacio con fecha de retiro menor a la actual");
+			}
+			
+			if(rf2.getHabitaciones().size() == 0)
+			{
+				throw new Exception("No puede agregar un espacio sin habitaciones");
+			}
+			
 			List<Habitacion> habitacionesHab = new ArrayList<Habitacion>();
 
 			List<Long> habitaciones = new ArrayList<Long>();

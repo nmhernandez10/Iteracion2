@@ -53,6 +53,9 @@ public class DAOCategoriaOperador
 
 			categoriasOperador.add(new CategoriaOperador(id, categoria, descripcion));
 		}
+		
+		prepStmt.close();
+		
 		return categoriasOperador;
 	}
 
@@ -67,6 +70,7 @@ public class DAOCategoriaOperador
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void updateCategoriaOperador(CategoriaOperador categoriaOperador) throws SQLException, Exception {
@@ -80,6 +84,7 @@ public class DAOCategoriaOperador
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void deleteCategoriaOperador(CategoriaOperador categoriaOperador) throws SQLException, Exception {
@@ -91,6 +96,7 @@ public class DAOCategoriaOperador
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public CategoriaOperador buscarCategoriaOperador(long id) throws SQLException, Exception {
@@ -109,7 +115,9 @@ public class DAOCategoriaOperador
 		
 		String categoria = rs.getString("NOMBRE");
 		String descripcion = rs.getString("DESCRIPCION");
-
+		
+		prepStmt.close();
+		
 		return new CategoriaOperador(id, categoria, descripcion);
 	}
 	
@@ -141,6 +149,8 @@ public class DAOCategoriaOperador
 		long id = Long.parseLong(rs.getString("ID"));
 		String descripcion = rs.getString("DESCRIPCION");
 
+		prepStmt.close();
+		
 		return new CategoriaOperador(id, nombre, descripcion);
 	}
 }

@@ -66,6 +66,9 @@ public class DAOCliente {
 
 			clientes.add(new Cliente(id, identificacion, nombre, edad, direccion, vinculo, reservas));
 		}
+		
+		prepStmt.close();
+		
 		return clientes;
 	}
 
@@ -83,6 +86,7 @@ public class DAOCliente {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void updateCliente(Cliente cliente) throws SQLException, Exception {
@@ -99,6 +103,7 @@ public class DAOCliente {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void deleteCliente(Cliente cliente) throws SQLException, Exception {
@@ -110,6 +115,7 @@ public class DAOCliente {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public Cliente buscarCliente(long id) throws SQLException, Exception {
@@ -139,6 +145,8 @@ public class DAOCliente {
 
 		List<Long> reservas = daoReserva.buscarReservasIdCliente(id);
 
+		prepStmt.close();
+		
 		return new Cliente(id, identificacion, nombre, edad, direccion, vinculo, reservas);
 	}
 
@@ -157,6 +165,9 @@ public class DAOCliente {
 		}
 		
 		Long idCliente = Long.parseLong(rs.getString("IDCLIENTE"));
+		
+		prepStmt.close();
+		
 		return buscarCliente(idCliente);
 	}
 	
@@ -211,6 +222,9 @@ public class DAOCliente {
 			RFC5 resultante =  new RFC5("Cliente", categoria, diasTotal, dineroTotal, servicios);
 			lista.add(resultante);
 		}
+		
+		prepStmt.close();
+		
 	}
 	
 	//RFC6
@@ -263,7 +277,13 @@ public class DAOCliente {
 			}
 			
 			RFC6 resultante =  new RFC6(id, "Cliente", diasTotal, dineroTotal, servicios);		
+			
+			prepStmt.close();
+			prepStmtC.close();
+			
 			return resultante;
 		}		
+		
+		
 	}
 }

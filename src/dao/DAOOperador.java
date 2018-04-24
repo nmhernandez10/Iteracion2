@@ -68,6 +68,9 @@ public class DAOOperador {
 
 			operadores.add(new Operador(id, registro, nombre, categoria, espacios, documento));
 		}
+		
+		prepStmt.close();
+		
 		return operadores;
 	}
 
@@ -85,6 +88,7 @@ public class DAOOperador {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void updateOperador(Operador operador) throws SQLException, Exception {
@@ -100,6 +104,7 @@ public class DAOOperador {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void deleteOperador(Operador operador) throws SQLException, Exception {
@@ -111,6 +116,7 @@ public class DAOOperador {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public Operador buscarOperador(long id) throws SQLException, Exception {
@@ -138,6 +144,8 @@ public class DAOOperador {
 
 		List<Long> espacios = daoEspacio.buscarEspaciosIdOperador(id);
 
+		prepStmt.close();
+		
 		return new Operador(id, registro, nombre, categoria, espacios, documento);
 	}
 
@@ -157,6 +165,9 @@ public class DAOOperador {
 		}
 
 		Long idOperador = Long.parseLong(rs.getString("IDOPERADOR"));
+		
+		prepStmt.close();
+		
 		return idOperador;
 	}
 
@@ -187,6 +198,9 @@ public class DAOOperador {
 
 			listaRet.add(new Operador(id, registro, nombre, catOp, espacios, documento));		
 		}
+		
+		prepStmt.close();
+		
 		return listaRet;
 	}
 
@@ -205,6 +219,9 @@ public class DAOOperador {
 		}
 		
 		Long id = Long.parseLong(rs.getString("ID"));
+		
+		prepStmt.close();
+		
 		return buscarOperador(id);
 	}
 
@@ -232,6 +249,8 @@ public class DAOOperador {
 			ingresos.add(nuevo);
 		}
 
+		prepStmt.close();
+		
 		return ingresos;
 	}
 
@@ -267,6 +286,8 @@ public class DAOOperador {
 			ocupaciones.add(nuevo);
 		}
 
+		prepStmt.close();
+		
 		return ocupaciones;
 	}
 
@@ -322,6 +343,8 @@ public class DAOOperador {
 			RFC5 resultante =  new RFC5("Operador", categoria, diasTotal, dineroTotal, servicios);
 			lista.add(resultante);
 		}
+		
+		prepStmt.close();
 	}
 
 	//RFC6
@@ -373,7 +396,10 @@ public class DAOOperador {
 				servicios.add(catServicio.getNombre());
 			}
 
-			RFC6 resultante =  new RFC6(id, "Operador", diasTotal, dineroTotal, servicios);		
+			RFC6 resultante =  new RFC6(id, "Operador", diasTotal, dineroTotal, servicios);	
+			
+			prepStmt.close();
+			
 			return resultante;
 		}		
 	}

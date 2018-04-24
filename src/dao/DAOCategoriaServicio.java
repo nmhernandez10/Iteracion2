@@ -53,6 +53,9 @@ public class DAOCategoriaServicio
 
 			categoriasServicio.add(new CategoriaServicio(id, categoria, descripcion));
 		}
+		
+		prepStmt.close();
+		
 		return categoriasServicio;
 	}
 
@@ -67,6 +70,7 @@ public class DAOCategoriaServicio
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void updateCategoriaServicio(CategoriaServicio categoriaServicio) throws SQLException, Exception {
@@ -80,6 +84,7 @@ public class DAOCategoriaServicio
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void deleteCategoriaServicio(CategoriaServicio categoriaServicio) throws SQLException, Exception {
@@ -91,6 +96,7 @@ public class DAOCategoriaServicio
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public CategoriaServicio buscarCategoriaServicio(long id) throws SQLException, Exception {
@@ -100,7 +106,7 @@ public class DAOCategoriaServicio
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
+		ResultSet rs = prepStmt.executeQuery();		
 		
 		if(!rs.next())
 		{
@@ -109,7 +115,9 @@ public class DAOCategoriaServicio
 		
 		String categoria = rs.getString("NOMBRE");
 		String descripcion = rs.getString("DESCRIPCION");
-
+		
+		prepStmt.close();
+		
 		return new CategoriaServicio(id, categoria, descripcion);
 	}
 	
@@ -141,6 +149,8 @@ public class DAOCategoriaServicio
 		long id = Long.parseLong(rs.getString("ID"));
 		String descripcion = rs.getString("DESCRIPCION");
 
+		prepStmt.close();
+		
 		return new CategoriaServicio(id, nombre, descripcion);
 	}
 }

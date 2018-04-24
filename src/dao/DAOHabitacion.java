@@ -63,6 +63,9 @@ public class DAOHabitacion {
 
 			habitacions.add(new Habitacion(id, categoria, compartido, capacidad, espacio));
 		}
+		
+		prepStmt.close();
+		
 		return habitacions;
 	}
 
@@ -85,7 +88,7 @@ public class DAOHabitacion {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
-
+		prepStmt.close();
 	}
 
 	public void updateHabitacion(Habitacion habitacion) throws SQLException, Exception {
@@ -107,6 +110,7 @@ public class DAOHabitacion {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void deleteHabitacion(Habitacion habitacion) throws SQLException, Exception {
@@ -118,6 +122,7 @@ public class DAOHabitacion {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public Habitacion buscarHabitacion(long id) throws SQLException, Exception {
@@ -146,6 +151,8 @@ public class DAOHabitacion {
 		daoEspacio.setConn(conn);
 		long espacio = daoEspacio.buscarEspacioIdHabitacion(id);
 
+		prepStmt.close();
+		
 		return new Habitacion(id, categoria, compartido, capacidad, espacio);
 	}
 
@@ -163,6 +170,8 @@ public class DAOHabitacion {
 			long idH = Long.parseLong(rs.getString("ID"));
 			habitaciones.add(idH);
 		}
+		
+		prepStmt.close();
 
 		return habitaciones;
 	}

@@ -53,6 +53,9 @@ public class DAOCategoriaHabitacion
 
 			categoriasHabitacion.add(new CategoriaHabitacion(id, categoria, descripcion));
 		}
+		
+		prepStmt.close();
+		
 		return categoriasHabitacion;
 	}
 
@@ -67,6 +70,7 @@ public class DAOCategoriaHabitacion
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void updateCategoriaHabitacion(CategoriaHabitacion categoriaHabitacion) throws SQLException, Exception {
@@ -80,6 +84,7 @@ public class DAOCategoriaHabitacion
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void deleteCategoriaHabitacion(CategoriaHabitacion categoriaHabitacion) throws SQLException, Exception {
@@ -91,6 +96,7 @@ public class DAOCategoriaHabitacion
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public CategoriaHabitacion buscarCategoriaHabitacion(long id) throws SQLException, Exception {
@@ -109,7 +115,9 @@ public class DAOCategoriaHabitacion
 		
 		String categoria = rs.getString("NOMBRE");
 		String descripcion = rs.getString("DESCRIPCION");
-
+		
+		prepStmt.close();
+		
 		return new CategoriaHabitacion(id, categoria, descripcion);
 	}
 	
@@ -141,6 +149,8 @@ public class DAOCategoriaHabitacion
 		long id = Long.parseLong(rs.getString("ID"));
 		String descripcion = rs.getString("DESCRIPCION");
 
+		prepStmt.close();
+		
 		return new CategoriaHabitacion(id, nombre, descripcion);
 	}
 }

@@ -53,6 +53,9 @@ public class DAOVinculo
 
 			categoriasCliente.add(new Vinculo(id, categoria, descripcion));
 		}
+		
+		prepStmt.close();
+		
 		return categoriasCliente;
 	}
 
@@ -67,6 +70,7 @@ public class DAOVinculo
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void updateVinculo(Vinculo vinculo) throws SQLException, Exception {
@@ -80,6 +84,7 @@ public class DAOVinculo
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void deleteVinculo(Vinculo vinculo) throws SQLException, Exception {
@@ -91,6 +96,7 @@ public class DAOVinculo
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public Vinculo buscarVinculo(long id) throws SQLException, Exception {
@@ -109,6 +115,8 @@ public class DAOVinculo
 		
 		String categoria = rs.getString("NOMBRE");
 		String descripcion = rs.getString("DESCRIPCION");
+		
+		prepStmt.close();
 
 		return new Vinculo(id, categoria, descripcion);
 	}
@@ -140,6 +148,8 @@ public class DAOVinculo
 		
 		long id = Long.parseLong(rs.getString("ID"));
 		String descripcion = rs.getString("DESCRIPCION");
+		
+		prepStmt.close();
 
 		return new Vinculo(id, nombre, descripcion);
 	}

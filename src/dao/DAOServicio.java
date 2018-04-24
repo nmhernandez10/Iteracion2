@@ -61,6 +61,9 @@ public class DAOServicio {
 
 			servicios.add(new Servicio(id, categoria, descripcion, precioAdicional, inicioHorario, finHorario, espacio));
 		}
+		
+		prepStmt.close();
+		
 		return servicios;
 	}
 
@@ -79,6 +82,7 @@ public class DAOServicio {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void updateServicio(Servicio servicio) throws SQLException, Exception {
@@ -107,6 +111,7 @@ public class DAOServicio {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public Servicio buscarServicio(long id) throws SQLException, Exception {
@@ -137,6 +142,8 @@ public class DAOServicio {
 		daoEspacio.setConn(conn);
 		long espacio = Long.parseLong(rs.getString("IDESPACIO"));
 
+		prepStmt.close();
+		
 		return new Servicio(id, categoria, descripcion, precioAdicional, inicioHorario, finHorario, espacio);
 	}
 
@@ -156,6 +163,9 @@ public class DAOServicio {
 
 			servicios.add(idS);
 		}
+		
+		prepStmt.close();
+		
 		return servicios;
 
 	}

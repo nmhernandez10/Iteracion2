@@ -94,6 +94,9 @@ public class DAOEspacio {
 			espacios.add(new Espacio(id, registro, capacidad, tamaño, ubicacion, precio, fechaRetiro, operador,
 					reservas, servicios, habitaciones));
 		}
+		
+		prepStmt.close();
+		
 		return espacios;
 	}
 
@@ -113,6 +116,7 @@ public class DAOEspacio {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void updateEspacio(Espacio espacio) throws SQLException, Exception {
@@ -131,6 +135,7 @@ public class DAOEspacio {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void deleteEspacio(Espacio espacio) throws SQLException, Exception 
@@ -143,6 +148,7 @@ public class DAOEspacio {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public Espacio buscarEspacio(long id) throws SQLException, Exception {
@@ -191,6 +197,8 @@ public class DAOEspacio {
 
 		List<Long> servicios = daoServicio.buscarServiciosIdEspacio(id);
 
+		prepStmt.close();
+		
 		return new Espacio(id, registro, capacidad, tamaño, ubicacion, precio, fechaRetiro, operador, reservas,
 				servicios, habitaciones);
 	}
@@ -210,6 +218,9 @@ public class DAOEspacio {
 			long id = Integer.parseInt(rs.getString("ID"));
 			espacios.add(id);
 		}
+		
+		prepStmt.close();
+		
 		return espacios;
 	}
 
@@ -230,6 +241,8 @@ public class DAOEspacio {
 			espacios.add(id);
 		}
 
+		prepStmt.close();
+		
 		return espacios;
 	}
 
@@ -250,6 +263,8 @@ public class DAOEspacio {
 		int id = Integer.parseInt(rs.getString("IDESPACIO"));
 		int espacio = id;
 
+		prepStmt.close();
+		
 		return espacio;
 	}
 	
@@ -274,6 +289,9 @@ public class DAOEspacio {
 
 			espacios.add(buscarEspacio(idR));
 		}
+		
+		prepStmt.close();
+		
 		return espacios;
 	}
 
@@ -295,6 +313,8 @@ public class DAOEspacio {
 			Espacio resultante = buscarEspacio(id);
 			espacios.add(resultante);
 		}
+		
+		prepStmt.close();
 		
 		return espacios;
 	}
@@ -374,6 +394,8 @@ public class DAOEspacio {
 			espacios.add(resultante);
 		}
 		
+		prepStmt.close();
+		
 		return espacios;
 	}
 	
@@ -408,6 +430,8 @@ public class DAOEspacio {
 			resultado.add(new RFC8(cliente, durTotal, ocasiones));
 		}
 		
+		prepStmt.close();
+		
 		return resultado;
 	}
 	
@@ -441,6 +465,8 @@ public class DAOEspacio {
 			int maxPer = rs.getInt("MAXIMOPERIODO");
 			resultado.add(new RFC9(espacio, maxPer));
 		}
+		
+		prepStmt.close();
 
 		return resultado;
 	}
@@ -524,6 +550,8 @@ public class DAOEspacio {
 			Espacio espacio = buscarEspacio(idEspacio);
 			resultado.add(espacio);
 		}
+		
+		prepStmt.close();
 
 		return resultado;
 	}

@@ -76,6 +76,9 @@ public class DAOReserva {
 			}
 			reservas.add(new Reserva(id,idCliente, idEspacio, idColectiva, fechaInicio, duracion, fechaReserva, cancelado, precio));
 		}
+		
+		prepStmt.close();
+		
 		return reservas;
 	}
 
@@ -121,6 +124,7 @@ public class DAOReserva {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void updateReserva(Reserva reserva) throws SQLException, Exception {
@@ -163,6 +167,7 @@ public class DAOReserva {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 
 	public void deleteReserva(Reserva reserva) throws SQLException, Exception {
@@ -174,6 +179,7 @@ public class DAOReserva {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		prepStmt.close();
 	}
 	
 	public Reserva buscarReserva(long id) throws SQLException, Exception {
@@ -211,6 +217,8 @@ public class DAOReserva {
 		if (rs.getString("CANCELADO").equals("Y")) {
 			cancelado = true;
 		}
+		
+		prepStmt.close();
 
 		return new Reserva(id, idCliente, idEspacio, idColectiva, fechaInicio, duracion, fechaReserva, cancelado, precio);
 	}
@@ -233,6 +241,8 @@ public class DAOReserva {
 			reservas.add(idR);
 		}		
 		
+		prepStmt.close();
+		
 		return reservas;
 	}
 
@@ -252,6 +262,9 @@ public class DAOReserva {
 			long idR = Long.parseLong(rs.getString("ID"));
 			reservas.add(idR);
 		}
+		
+		prepStmt.close();
+		
 		return reservas;
 	}
 
@@ -272,6 +285,9 @@ public class DAOReserva {
 
 			reservas.add(idR);
 		}
+		
+		prepStmt.close();
+		
 		return reservas;
 	}
 	
@@ -292,6 +308,9 @@ public class DAOReserva {
 			Reserva reserva = buscarReserva(idR);
 			reservas.add(reserva);
 		}
+		
+		prepStmt.close();
+		
 		return reservas;
 	}
 	
@@ -316,6 +335,9 @@ public class DAOReserva {
 
 			reservas.add(buscarReserva(idR));
 		}
+		
+		prepStmt.close();
+		
 		return reservas;
 	}
 	
@@ -358,6 +380,8 @@ public class DAOReserva {
 			Reserva reserva = buscarReserva(idReserva);
 			resultado.add(reserva);
 		}
+		
+		prepStmt.close();		
 		
 		return resultado;
 	}

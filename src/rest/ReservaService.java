@@ -1,5 +1,8 @@
 package rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -95,7 +98,8 @@ public class ReservaService {
 
 		try {
 			long id = Long.parseLong(idS);
-			String resultado = tm.cancelarReservaColectiva(id);
+			List<String> resultado = new ArrayList<String>();
+			resultado.add(tm.cancelarReservaColectiva(id));
 			return Response.status(200).entity(resultado).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();

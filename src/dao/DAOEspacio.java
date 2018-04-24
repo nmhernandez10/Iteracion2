@@ -380,6 +380,19 @@ public class DAOEspacio {
 		sql += ") GROUP BY ID)TABLACATEGORIAS "+
 				"WHERE TABLACATEGORIAS.CONTEO = " + rfc4.getServicios().size();
 		
+		if(servicios.size() == 0)
+		{
+			sql = "SELECT ESPACIOS.ID "+
+					"FROM ESPACIOS INNER JOIN SERVICIOS ON ESPACIOS.ID = SERVICIOS.IDESPACIO "+
+					"WHERE ESPACIOS.ID NOT IN(SELECT ID "+
+					"FROM ESPACIOS "+
+					"WHERE FECHARETIRO < TO_DATE('" + rfc4.getFechaMayor() + "','YYYY-MM-DD')) AND ESPACIOS.ID NOT IN (SELECT idEspacio "+
+					"FROM(SELECT idEspacio, COUNT(ID) as CONTEO "+
+					"FROM RESERVAS "+
+					"WHERE FECHAINICIO > TO_DATE('" + rfc4.getFechaMenor() + "','YYYY-MM-DD') AND FECHAINICIO + DURACION < TO_DATE('" + rfc4.getFechaMayor()+"','YYYY-MM-DD') "+
+					"GROUP BY idEspacio))";
+		}
+		
 		System.out.println("SQL stmt:" + sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);

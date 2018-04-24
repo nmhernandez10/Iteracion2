@@ -376,7 +376,12 @@ public class AlohAndesTransactionManager
 				System.err.println(e.getMessage());
 				e.printStackTrace();
 				throw e;
-			}		
+			}	
+			
+			if(reserva.isCancelado())
+			{
+				throw new Exception("No puede agregar una nueva reserva como cancelada");
+			}
 			
 			if(reserva.getDuracion() <= 0)
 			{
@@ -586,6 +591,11 @@ public class AlohAndesTransactionManager
 			if(fechaCancelacion == null)
 			{
 				fechaCancelacion = new Date();
+			}
+			
+			if(espacio.getFechaRetiroDate().before(fechaCancelacion))
+			{
+				throw new Exception("No puede cancelar un espacio que ya está cancelado");
 			}
 
 			Operador operador = null;

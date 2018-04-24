@@ -403,10 +403,6 @@ public class AlohAndesTransactionManager
 				}
 			}
 
-			if (espacio.getCapacidad() < espacio.calcularOcupacionEnFecha(reserva.getFechaInicioDate(), conn) + 1) {
-				throw new Exception("La nueva reserva excediría la capacidad del espacio a reservar");
-			}
-
 			if (daoOperador.buscarOperador(espacio.getOperador()).getCategoria().getNombre().toUpperCase().equals("VIVIENDA_UNIVERSITARIA")
 					&& (cliente.getVinculo().getNombre().toUpperCase().equals("ESTUDIANTE") || cliente.getVinculo().getNombre().toUpperCase().equals("PROFESOR")
 							|| cliente.getVinculo().getNombre().toUpperCase().equals("EMPLEADO")
@@ -503,6 +499,11 @@ public class AlohAndesTransactionManager
 			if (reserva.isCancelado())
 			{
 				throw new Exception("La reserva no puede cancelarse porque ya estaba cancelada.");
+			}
+			
+			if(reserva.calcularFechaFin().before(new Date()))
+			{
+				throw new Exception("No se puede cancelar una reserva que ya culminó");
 			}
 
 			Date fechaCancelacion = new Date();

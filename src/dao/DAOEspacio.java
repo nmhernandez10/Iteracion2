@@ -252,6 +252,30 @@ public class DAOEspacio {
 
 		return espacio;
 	}
+	
+	//RFC7
+	
+	public List<Espacio> buscarEspaciosIdCategoriaOperador(long idCatOperador) throws SQLException, Exception {
+
+		List<Espacio> espacios = new ArrayList<Espacio>();
+
+		String sql ="SELECT ESPACIOS.ID "+
+					"FROM ESPACIOS, OPERADORES "+
+					"WHERE ESPACIOS.IDOPERADOR = OPERADORES.ID AND OPERADORES.IDCATEGORIA = "+idCatOperador;
+
+		System.out.println("SQL stmt:" + sql);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while (rs.next()) {
+			long idR = Long.parseLong(rs.getString("ID"));
+
+			espacios.add(buscarEspacio(idR));
+		}
+		return espacios;
+	}
 
 	// RFC2
 
@@ -447,49 +471,46 @@ public class DAOEspacio {
 				            "FROM OPERADORES "+
 				            "WHERE IDCATEGORIA = " + idCatOperador + ") TABLAOPERADORES "+
 				            "WHERE ESPACIOS.IDOPERADOR = TABLAOPERADORES.ID) TABLAESPACIOS "+
-				            "WHERE HABITACIONES.IDESPACIO = TABLAESPACIOS.ID  AND HABITACIONES.IDCATEGORIA = "+idCatHabitacion+") "+
-				    "AND ID IN(SELECT ID "+
-				            "FROM(SELECT ID, COUNT(ID) AS CONTEO "+
-				            "FROM(SELECT TABLAESPACIOS.ID, SERVICIOS.IDCATEGORIA "+
-				            "FROM SERVICIOS,(SELECT ESPACIOS.ID "+
-				            "FROM ESPACIOS, (SELECT * "+
-				            "FROM OPERADORES "+
-				            "WHERE IDCATEGORIA = "+idCatOperador+") TABLAOPERADORES "+
-				            "WHERE ESPACIOS.IDOPERADOR = TABLAOPERADORES.ID) TABLAESPACIOS "+
-				            "WHERE SERVICIOS.IDESPACIO = TABLAESPACIOS.ID";
+				            "WHERE HABITACIONES.IDESPACIO = TABLAESPACIOS.ID  AND HABITACIONES.IDCATEGORIA = "+idCatHabitacion+") ";
 		
-		if(numServicios > 0)
+		if (numServicios > 0)
 		{
-			sql += " AND (";
-		}
-		
-		int contador = 0;
-		
-		for(String serV : rf7.getServicios())
-		{
-			contador ++;
-			long idCatServ = daoCatServicio.buscarCategoriaServicioNombre(serV).getId();
-			
-			if(contador == 1)
-			{
-				sql += "SERVICIOS.IDCATEGORIA = " +idCatServ;
-			}
-			else
-			{
-				sql += " OR SERVICIOS.IDCATEGORIA = " +idCatServ;
-			}
-		}
-		
-		if(numServicios > 0)
-		{
-			sql += ")";
-		}
-		
-		sql +=")TABLACATEGORIAS "+
-	            "GROUP BY TABLACATEGORIAS.ID) "+
-		            "WHERE CONTEO = "+numServicios+")";
-		
+			sql += "AND ID IN(SELECT ID "+
+					"FROM(SELECT ID, COUNT(ID) AS CONTEO "+
+					"FROM(SELECT TABLAESPACIOS.ID, SERVICIOS.IDCATEGORIA "+
+					"FROM SERVICIOS,(SELECT ESPACIOS.ID "+
+					"FROM ESPACIOS, (SELECT * "+
+					"FROM OPERADORES "+
+					"WHERE IDCATEGORIA = "+idCatOperador+") TABLAOPERADORES "+
+					"WHERE ESPACIOS.IDOPERADOR = TABLAOPERADORES.ID) TABLAESPACIOS "+
+					"WHERE SERVICIOS.IDESPACIO = TABLAESPACIOS.ID";
 
+			sql += " AND (";		
+
+			int contador = 0;
+
+			for(String serV : rf7.getServicios())
+			{
+				contador ++;
+				long idCatServ = daoCatServicio.buscarCategoriaServicioNombre(serV).getId();
+
+				if(contador == 1)
+				{
+					sql += "SERVICIOS.IDCATEGORIA = " +idCatServ;
+				}
+				else
+				{
+					sql += " OR SERVICIOS.IDCATEGORIA = " +idCatServ;
+				}
+			}
+
+			sql += ")";
+
+			sql +=")TABLACATEGORIAS "+
+					"GROUP BY TABLACATEGORIAS.ID) "+
+					"WHERE CONTEO = "+numServicios+")";
+
+		}
 
 		System.out.println("SQL stmt:" + sql);
 

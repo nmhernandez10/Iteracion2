@@ -170,7 +170,12 @@ public class AlohAndesTransactionManager
 			daoOperador.setConn(conn);
 			daoServicio.setConn(conn);
 			daoCatServicio.setConn(conn);
-
+			
+			if(rf2.getTamaño() <= 0)
+			{
+				throw new Exception("No puede haber un espacio con tamaño menor o igual a 0");
+			}
+			
 			List<Habitacion> habitacionesHab = new ArrayList<Habitacion>();
 
 			List<Long> habitaciones = new ArrayList<Long>();
@@ -229,6 +234,11 @@ public class AlohAndesTransactionManager
 				serviciosServ.add(new Servicio(idMayor, catServ, rf2s.getDescripcion(), rf2s.getPrecioAdicional(), rf2s.getInicioHorario(), rf2s.getFinHorario(), rf2.getId()));
 				servicios.add(idMayor);
 				precio += rf2s.getPrecioAdicional();
+			}
+			
+			if(rf2.getFechaRetiro() == null || rf2.getFechaRetiro().equals(""))
+			{
+				rf2.setFechaRetiro("2999-12-31");
 			}
 			
 			Espacio espacio = new Espacio(rf2.getId(), rf2.getRegistro(),capacidad, rf2.getTamaño() , rf2.getDireccion(), rf2.getPrecio()+precio, rf2.getFechaRetiro(), rf2.getOperador(), new ArrayList<Long>(), servicios, habitaciones);
@@ -509,7 +519,13 @@ public class AlohAndesTransactionManager
 					reserva.setPrecio(reserva.getPrecio() * 0.3);
 				}
 			}			
-
+			
+			if(desdeRF9)
+			{
+				reserva.setCancelado(true);
+				reserva.setPrecio(0);
+			}
+			
 			daoReserva.updateReserva(reserva);
 			
 			if(!desdeRF9)
@@ -850,12 +866,14 @@ public class AlohAndesTransactionManager
 		DAOOperador daoOperador = new DAOOperador();
 		DAOReserva daoReserva = new DAOReserva();
 		DAOCategoriaOperador daoCatOperador = new DAOCategoriaOperador();
+		DAOEspacio daoEspacio = new DAOEspacio();
 		
 		try {
 			this.conn = darConexion();
 			daoOperador.setConn(conn);
 			daoReserva.setConn(conn);
 			daoCatOperador.setConn(conn);
+			daoEspacio.setConn(conn);
 			
 			if(!rfc7.getTimeUnit().equalsIgnoreCase("DÍA") && !rfc7.getTimeUnit().equalsIgnoreCase("SEMANA") && !rfc7.getTimeUnit().equalsIgnoreCase("MES") && !rfc7.getTimeUnit().equalsIgnoreCase("AÑO") )
 			{
@@ -881,15 +899,17 @@ public class AlohAndesTransactionManager
 			Date fechaMenor = new Date();
 			Date fechaMayor = new Date();
 			
+			int numEspaciosOperador = daoEspacio.buscarEspaciosIdCategoriaOperador(idCatOperador).size();
+			
 			for(Reserva reserva : analizadas)
 			{
-				if(reserva.getFechaInicioDate().before(fechaMenor))
+				if(reserva.getFechaInicioDate().before(fechaMenor) && !reserva.isCancelado())
 				{
 					fechaMenor = agregarMes(reserva.getFechaInicioDate(), -reserva.getFechaInicioDate().getMonth()) ;
 					fechaMenor = agregarDía(fechaMenor, -(reserva.getFechaInicioDate().getDate() -1)) ;
 				}
 				
-				if(reserva.calcularFechaFin().after(fechaMayor))
+				if(reserva.calcularFechaFin().after(fechaMayor) && !reserva.isCancelado())
 				{
 					fechaMayor = agregarMes(reserva.getFechaInicioDate(), 13 - reserva.getFechaInicioDate().getMonth()) ;
 					fechaMayor = agregarDía(fechaMenor, (31-reserva.getFechaInicioDate().getDate())) ;
@@ -942,9 +962,9 @@ public class AlohAndesTransactionManager
 				}
 				if(puntajeDemanda > 0)
 				{
-					if((puntajeDemanda/analizadas.size()) < menorOcupacion)
+					if((puntajeDemanda/numEspaciosOperador) < menorOcupacion)
 					{
-						menorOcupacion = puntajeDemanda/analizadas.size();
+						menorOcupacion = puntajeDemanda/numEspaciosOperador;
 						mejorFechaOcupacion = fechaMenor;
 					}
 				}				
@@ -1113,7 +1133,12 @@ public class AlohAndesTransactionManager
 			daoReserva.setConn(conn);
 						
 			List<Reserva> resultado = new ArrayList<Reserva>();
-
+			
+			if (rf7.getCantidad() <= 0)
+			{
+				throw new Exception("Especifique un número mayor a 0 de habitaciones a reservas");
+			}
+			
 			List<Espacio> espaciosCandidatos = daoEspacio.obtenerEspaciosRF7(rf7);
 
 			int cantidadRestante = rf7.getCantidad();
@@ -1214,6 +1239,11 @@ public class AlohAndesTransactionManager
 			this.conn = darConexion();
 			daoEspacio.setConn(conn);
 			daoReserva.setConn(conn);
+			
+			if(transformarFecha(rf9.getFechaDeshabilitacion()).before(new Date()))
+			{
+				throw new Exception("No puede deshabilitar un espacio de alojamiento en fechas pasadas a la actual");
+			}
 			
 			Espacio espacio = daoEspacio.buscarEspacio(rf9.getIdEspacio());
 			
@@ -1336,7 +1366,14 @@ public class AlohAndesTransactionManager
 			
 			Espacio habilitado = daoEspacio.buscarEspacio(id);
 			
-			habilitado.setFechaRetiro(null);
+			if(habilitado.getFechaRetiro().equals("2999-12-31"))
+			{
+				throw new Exception("El espacio con id = " + id + " ya se encuentra habilitado");
+			}
+			else
+			{
+				habilitado.setFechaRetiro("2999-12-31");
+			}			
 			
 			daoEspacio.updateEspacio(habilitado);
 			
@@ -1380,14 +1417,21 @@ public class AlohAndesTransactionManager
 			
 			List<Reserva> reservas = daoReserva.buscarReservasIdColectiva(id);
 			
+			if(reservas.size() == 0)
+			{
+				throw new Exception("La reserva colectiva ya fue cancelada, no existe o no tiene reservas individuales asociadas");
+			}
+			
 			int cantidadRestante = reservas.size();
 			
-			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			conn.setAutoCommit(false);
+			
+			conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);			
 			
 			String resultado = "";
 			
 			int contador = 0;
+			
 			
 			for(Reserva reserva : reservas)
 			{
@@ -1418,14 +1462,14 @@ public class AlohAndesTransactionManager
 			
 			if(cantidadRestante > 0)
 			{
-				resultado += "No pudo cancelarse las reservas " + resultado + " que son las que pertenecen a la reserva colectiva " + id;
+				resultado = "No pudo cancelarse las reservas " + resultado + " que son las que pertenecen a la reserva colectiva " + id;
 				conn.rollback();
 				conn.setAutoCommit(true);
 				throw new Exception ("No se pudo realizar la transacción. Faltaron " + cantidadRestante + " habitaciones");
 			}
 			else
 			{
-				resultado += "Se cancelaron satisfactoriamente las reservas " + resultado + " que son las pertenecientes a la reserva colectiva " + id;
+				resultado = "Se cancelaron satisfactoriamente las reservas " + resultado + " que son las pertenecientes a la reserva colectiva " + id;
 			}
 			
 			conn.commit();
@@ -1491,5 +1535,17 @@ public class AlohAndesTransactionManager
 		return calendar.getTime();
 	}
 
-	
+	public Date transformarFecha(String fecha)
+	{
+		try
+		{
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			return new Date(format.parse(fecha).getTime());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

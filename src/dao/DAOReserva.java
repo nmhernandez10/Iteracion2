@@ -44,7 +44,9 @@ public class DAOReserva {
 		ArrayList<Reserva> reservas = new ArrayList<Reserva>();
 
 		String sql = "SELECT * FROM RESERVAS";
-
+		
+		System.out.println("SQL stmt:" + sql);
+		
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
@@ -60,7 +62,7 @@ public class DAOReserva {
 			}
 			else
 			{
-				idColectiva = Long.parseLong(rs.getString("IDESPACIO"));	
+				idColectiva = Long.parseLong(rs.getString("IDCOLECTIVA"));	
 			}
 			Date fechaInicioD = rs.getDate("FECHAINICIO");
 			String fechaInicio = fechaInicioD.toString();
@@ -197,7 +199,7 @@ public class DAOReserva {
 		}
 		else
 		{
-			idColectiva = Long.parseLong(rs.getString("IDESPACIO"));	
+			idColectiva = Long.parseLong(rs.getString("IDCOLECTIVA"));	
 		}
 		Date fechaInicioD = rs.getDate("FECHAINICIO");
 		String fechaInicio = fechaInicioD.toString();
@@ -277,7 +279,7 @@ public class DAOReserva {
 
 		List<Reserva> reservas = new ArrayList<Reserva>();
 
-		String sql = "SELECT * FROM RESERVAS WHERE IDCOLECTIVA = " + idColectiva;
+		String sql = "SELECT * FROM RESERVAS WHERE IDCOLECTIVA = " + idColectiva+ " AND RESERVAS.CANCELADO = 'N'";
 
 		System.out.println("SQL stmt:" + sql);
 
@@ -292,6 +294,8 @@ public class DAOReserva {
 		}
 		return reservas;
 	}
+	
+	//RFC7
 	
 	public List<Reserva> buscarReservasIdCategoriaOperador(long idCatOperador) throws SQLException, Exception {
 

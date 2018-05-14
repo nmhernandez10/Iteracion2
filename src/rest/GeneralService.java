@@ -41,10 +41,13 @@ public class GeneralService {
 	@Path("/usoUsuarios")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response espaciosPopulares() {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			ListaRFC5 espacios = new ListaRFC5(tm.usosPorCategoria());
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(espacios).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -57,12 +60,15 @@ public class GeneralService {
 	@Path("/usoUsuario/"+ "{tipo}"+"/"+"{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteEspacio(@PathParam("id") String idS, @PathParam("tipo") String tipo) {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try 
 		{
 			long id = Long.parseLong(idS);
 			RFC6 usuario = tm.usoPorUsuario(id, tipo);
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(usuario).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -75,11 +81,14 @@ public class GeneralService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response analizarOperacion(RFC7 rfc7) throws Exception {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try 
 		{
 			List<String> resultados = tm.analizarOperacion(rfc7);
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(resultados).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();

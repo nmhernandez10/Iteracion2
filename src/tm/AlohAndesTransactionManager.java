@@ -936,7 +936,7 @@ public class AlohAndesTransactionManager
 				if(reserva.calcularFechaFin().after(fechaMayor) && !reserva.isCancelado())
 				{
 					fechaMayor = agregarMes(reserva.getFechaInicioDate(), 13 - reserva.getFechaInicioDate().getMonth()) ;
-					fechaMayor = agregarDía(fechaMenor, (31-reserva.getFechaInicioDate().getDate())) ;
+					fechaMayor = agregarDía(fechaMayor, (31-reserva.getFechaInicioDate().getDate())) ;
 				}
 			}		
 			

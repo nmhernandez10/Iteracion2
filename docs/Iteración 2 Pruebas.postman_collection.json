@@ -1,0 +1,1415 @@
+{
+	"info": {
+		"_postman_id": "7feed4a3-3661-4dd9-b133-5a3c9807e5cc",
+		"name": "Iteración 2 Pruebas",
+		"description": "Las pruebas realizadas a cada requerimiento de la iteración 2 de Sistemas Transaccionales",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "RF1P1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 1,\n\t\"documento\" : 15780,\n\t\"categoria\" : \"VECINO\",\n\t\"nombre\" : \"Alejandro Parra\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/operadores/agregarOperador",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"operadores",
+						"agregarOperador"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un operador con un ID ya existente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF1P2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 13,\n\t\"documento\" : 123,\n\t\"categoria\" : \"VECINO\",\n\t\"nombre\" : \"Alejandro Parra\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/operadores/agregarOperador",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"operadores",
+						"agregarOperador"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un operador con un registro ya existente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF1P3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 13,\n\t\"registro\" : 12,\n\t\"categoria\" : \"HOTEL\",\n\t\"nombre\" : \"Las Margaritas\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/operadores/agregarOperador",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"operadores",
+						"agregarOperador"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un operador con un documento ya existente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF1P4",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 13,\n\t\"categoria\" : \"HOTEL\",\n\t\"nombre\" : \"Las Margaritas\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/operadores/agregarOperador",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"operadores",
+						"agregarOperador"
+					]
+				},
+				"description": "Comprobar que no puede ingresarse un HOTEL, por ejemplo, sin registro."
+			},
+			"response": []
+		},
+		{
+			"name": "RF1P5",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 13,\n\t\"categoria\" : \"VECINO\",\n\t\"nombre\" : \"Alejandro Parra\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/operadores/agregarOperador",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"operadores",
+						"agregarOperador"
+					]
+				},
+				"description": "Comprobar que no puede ingresarse un VECINO, por ejemplo, sin documento."
+			},
+			"response": []
+		},
+		{
+			"name": "RF1P6",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 13,\n\t\"documento\" : 15780,\n\t\"categoria\" : \"PROFESOR\",\n\t\"nombre\" : \"Alejandro Parra\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/operadores/agregarOperador",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"operadores",
+						"agregarOperador"
+					]
+				},
+				"description": "Comprobar que no puede ingresarse un operador con una categoría inexistente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF1P7",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 13,\n\t\"documento\" : 15780,\n\t\"categoria\" : \"VECINO\",\n\t\"nombre\" : \"Alejandro Parra\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/operadores/agregarOperador",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"operadores",
+						"agregarOperador"
+					]
+				},
+				"description": "Agregar un operador sin problema alguno dado que cumple con las reglas de negocio."
+			},
+			"response": []
+		},
+		{
+			"name": "RF2P1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 1,\n\t\"registro\" : 10001,\n\t\"tamaño\" : 100,\n\t\"direccion\" : \"City U APTO 203\",\n\t\"precio\" : 100000,\n\t\"fechaRetiro\": \"2020-12-12\",\n\t\"operador\" : 1,\n\t\"servicios\" : [\n\t\t{\n\t\t\t\"categoria\" : \"TV\",\n\t\t\t\"descripcion\" : \"Televisión DirectTV todos los días de la semana\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"RECEPCIÓN\",\n\t\t\t\"descripcion\" : \"Recepción en el piso más bajo del edificio del operador\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"SERVICIOS_PÚBLICOS\",\n\t\t\t\"descripcion\" : \"Servicios públicos NO incluidos, con un cargo adicional\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"OTRO\",\n\t\t\t\"descripcion\" : \"Salón de fiestas\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 12,\n\t\t\t\"finHorario\": 3\n\t\t}\n\t\t],\n\t\"habitaciones\":[\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"true\",\n\t\t\t\"capacidad\" : 2\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"false\",\n\t\t\t\"capacidad\" : 1\n\t\t}\n\t\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/agregarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"agregarEspacio"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un espacio con un ID ya existente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF2P2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 25,\n\t\"registro\" : 13453,\n\t\"tamaño\" : 100,\n\t\"direccion\" : \"City U APTO 203\",\n\t\"precio\" : 100000,\n\t\"fechaRetiro\": \"2020-12-12\",\n\t\"operador\" : 1,\n\t\"servicios\" : [\n\t\t{\n\t\t\t\"categoria\" : \"TV\",\n\t\t\t\"descripcion\" : \"Televisión DirectTV todos los días de la semana\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"RECEPCIÓN\",\n\t\t\t\"descripcion\" : \"Recepción en el piso más bajo del edificio del operador\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"SERVICIOS_PÚBLICOS\",\n\t\t\t\"descripcion\" : \"Servicios públicos NO incluidos, con un cargo adicional\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"OTRO\",\n\t\t\t\"descripcion\" : \"Salón de fiestas\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 12,\n\t\t\t\"finHorario\": 3\n\t\t}\n\t\t],\n\t\"habitaciones\":[\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"true\",\n\t\t\t\"capacidad\" : 2\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"false\",\n\t\t\t\"capacidad\" : 1\n\t\t}\n\t\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/agregarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"agregarEspacio"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un espacio con un registro ya existente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF2P3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 25,\n\t\"registro\" : 10001,\n\t\"tamaño\" : 100,\n\t\"direccion\" : \"City U APTO 203\",\n\t\"precio\" : 100000,\n\t\"fechaRetiro\": \"2017-12-12\",\n\t\"operador\" : 1,\n\t\"servicios\" : [\n\t\t{\n\t\t\t\"categoria\" : \"TV\",\n\t\t\t\"descripcion\" : \"Televisión DirectTV todos los días de la semana\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"RECEPCIÓN\",\n\t\t\t\"descripcion\" : \"Recepción en el piso más bajo del edificio del operador\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"SERVICIOS_PÚBLICOS\",\n\t\t\t\"descripcion\" : \"Servicios públicos NO incluidos, con un cargo adicional\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"OTRO\",\n\t\t\t\"descripcion\" : \"Salón de fiestas\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 12,\n\t\t\t\"finHorario\": 3\n\t\t}\n\t\t],\n\t\"habitaciones\":[\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"true\",\n\t\t\t\"capacidad\" : 2\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"false\",\n\t\t\t\"capacidad\" : 1\n\t\t}\n\t\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/agregarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"agregarEspacio"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un espacio con fecha de retiro menor a la actual."
+			},
+			"response": []
+		},
+		{
+			"name": "RF2P4",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 25,\n\t\"registro\" : 10001,\n\t\"tamaño\" : 100,\n\t\"direccion\" : \"City U APTO 203\",\n\t\"precio\" : 100000,\n\t\"fechaRetiro\": \"2020-12-12\",\n\t\"operador\" : 1,\n\t\"servicios\" : [\n\t\t{\n\t\t\t\"categoria\" : \"ASADO\",\n\t\t\t\"descripcion\" : \"Televisión DirectTV todos los días de la semana\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"RECEPCIÓN\",\n\t\t\t\"descripcion\" : \"Recepción en el piso más bajo del edificio del operador\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"SERVICIOS_PÚBLICOS\",\n\t\t\t\"descripcion\" : \"Servicios públicos NO incluidos, con un cargo adicional\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"OTRO\",\n\t\t\t\"descripcion\" : \"Salón de fiestas\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 12,\n\t\t\t\"finHorario\": 3\n\t\t}\n\t\t],\n\t\"habitaciones\":[\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"true\",\n\t\t\t\"capacidad\" : 2\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"false\",\n\t\t\t\"capacidad\" : 1\n\t\t}\n\t\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/agregarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"agregarEspacio"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un espacio con servicios inexistentes, por ejemplo, 'ASADO'."
+			},
+			"response": []
+		},
+		{
+			"name": "RF2P5",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 25,\n\t\"registro\" : 10001,\n\t\"tamaño\" : 100,\n\t\"direccion\" : \"City U APTO 203\",\n\t\"precio\" : 100000,\n\t\"fechaRetiro\": \"2020-12-12\",\n\t\"operador\" : 1,\n\t\"servicios\" : [\n\t\t{\n\t\t\t\"categoria\" : \"TV\",\n\t\t\t\"descripcion\" : \"Televisión DirectTV todos los días de la semana\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"RECEPCIÓN\",\n\t\t\t\"descripcion\" : \"Recepción en el piso más bajo del edificio del operador\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"SERVICIOS_PÚBLICOS\",\n\t\t\t\"descripcion\" : \"Servicios públicos NO incluidos, con un cargo adicional\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"OTRO\",\n\t\t\t\"descripcion\" : \"Salón de fiestas\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 12,\n\t\t\t\"finHorario\": 3\n\t\t}\n\t\t],\n\t\"habitaciones\":[\n\t\t{\n\t\t\t\"categoria\" : \"FAMILIAR\",\n\t\t\t\"compartido\" : \"true\",\n\t\t\t\"capacidad\" : 2\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"false\",\n\t\t\t\"capacidad\" : 1\n\t\t}\n\t\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/agregarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"agregarEspacio"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un espacio con tipos de habitaciones inexistentes, por ejemplo, 'FAMILIAR'."
+			},
+			"response": []
+		},
+		{
+			"name": "RF2P6",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 25,\n\t\"registro\" : 10001,\n\t\"tamaño\" : 100,\n\t\"direccion\" : \"City U APTO 203\",\n\t\"precio\" : 100000,\n\t\"fechaRetiro\": \"2020-12-12\",\n\t\"operador\" : 5,\n\t\"servicios\" : [\n\t\t{\n\t\t\t\"categoria\" : \"TV\",\n\t\t\t\"descripcion\" : \"Televisión DirectTV todos los días de la semana\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"RECEPCIÓN\",\n\t\t\t\"descripcion\" : \"Recepción en el piso más bajo del edificio del operador\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"SERVICIOS_PÚBLICOS\",\n\t\t\t\"descripcion\" : \"Servicios públicos NO incluidos, con un cargo adicional\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"OTRO\",\n\t\t\t\"descripcion\" : \"Salón de fiestas\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 12,\n\t\t\t\"finHorario\": 3\n\t\t}\n\t\t],\n\t\"habitaciones\":[\n\t\t{\n\t\t\t\"categoria\" : \"SUITE\",\n\t\t\t\"compartido\" : \"true\",\n\t\t\t\"capacidad\" : 2\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"false\",\n\t\t\t\"capacidad\" : 1\n\t\t}\n\t\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/agregarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"agregarEspacio"
+					]
+				},
+				"description": "Comprobar que no puede, por ejemplo, agregarse un espacio con una habitación 'SUITE' cuando no es HOTEL u HOSTAL."
+			},
+			"response": []
+		},
+		{
+			"name": "RF2P7",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 25,\n\t\"registro\" : 10001,\n\t\"tamaño\" : 100,\n\t\"direccion\" : \"cll21#12-2piso1\",\n\t\"precio\" : 100000,\n\t\"fechaRetiro\": \"2020-12-12\",\n\t\"operador\" : 1,\n\t\"servicios\" : [\n\t\t{\n\t\t\t\"categoria\" : \"TV\",\n\t\t\t\"descripcion\" : \"Televisión DirectTV todos los días de la semana\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"RECEPCIÓN\",\n\t\t\t\"descripcion\" : \"Recepción en el piso más bajo del edificio del operador\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"SERVICIOS_PÚBLICOS\",\n\t\t\t\"descripcion\" : \"Servicios públicos NO incluidos, con un cargo adicional\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"OTRO\",\n\t\t\t\"descripcion\" : \"Salón de fiestas\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 12,\n\t\t\t\"finHorario\": 3\n\t\t}\n\t\t],\n\t\"habitaciones\":[\n\t\t{\n\t\t\t\"categoria\" : \"SUITE\",\n\t\t\t\"compartido\" : \"true\",\n\t\t\t\"capacidad\" : 2\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"false\",\n\t\t\t\"capacidad\" : 1\n\t\t}\n\t\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/agregarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"agregarEspacio"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un espacio con la misma dirección que uno ya existente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF2P8",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 25,\n\t\"registro\" : 10001,\n\t\"tamaño\" : 100,\n\t\"direccion\" : \"City U APTO 203\",\n\t\"precio\" : 100000,\n\t\"fechaRetiro\": \"2020-12-12\",\n\t\"operador\" : 1,\n\t\"servicios\" : [\n\t\t{\n\t\t\t\"categoria\" : \"TV\",\n\t\t\t\"descripcion\" : \"Televisión DirectTV todos los días de la semana\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"RECEPCIÓN\",\n\t\t\t\"descripcion\" : \"Recepción en el piso más bajo del edificio del operador\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"SERVICIOS_PÚBLICOS\",\n\t\t\t\"descripcion\" : \"Servicios públicos NO incluidos, con un cargo adicional\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"OTRO\",\n\t\t\t\"descripcion\" : \"Salón de fiestas\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 12,\n\t\t\t\"finHorario\": 3\n\t\t}\n\t\t],\n\t\"habitaciones\":[]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/agregarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"agregarEspacio"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un espacio sin habitaciones."
+			},
+			"response": []
+		},
+		{
+			"name": "RF2P9",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 25,\n\t\"registro\" : 10001,\n\t\"tamaño\" : 100,\n\t\"direccion\" : \"City U APTO 203\",\n\t\"precio\" : 100000,\n\t\"fechaRetiro\": \"2020-12-12\",\n\t\"operador\" : 1,\n\t\"servicios\" : [\n\t\t{\n\t\t\t\"categoria\" : \"TV\",\n\t\t\t\"descripcion\" : \"Televisión DirectTV todos los días de la semana\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"RECEPCIÓN\",\n\t\t\t\"descripcion\" : \"Recepción en el piso más bajo del edificio del operador\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"SERVICIOS_PÚBLICOS\",\n\t\t\t\"descripcion\" : \"Servicios públicos NO incluidos, con un cargo adicional\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"OTRO\",\n\t\t\t\"descripcion\" : \"Salón de fiestas\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 12,\n\t\t\t\"finHorario\": 3\n\t\t}\n\t\t],\n\t\"habitaciones\":[\n\t\t{\n\t\t\t\"categoria\" : \"SUITE\",\n\t\t\t\"compartido\" : \"true\",\n\t\t\t\"capacidad\" : 2\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"false\",\n\t\t\t\"capacidad\" : 1\n\t\t}\n\t\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/agregarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"agregarEspacio"
+					]
+				},
+				"description": "Agregar un espacio sin problema alguno dado que cumple con las reglas de negocio."
+			},
+			"response": []
+		},
+		{
+			"name": "RF3P1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 1,\n\t\"vinculo\" : \"PROFESOR_INVITADO\",\n\t\"documento\" : 51798339,\n\t\"nombre\" : \"Albert Einstein\",\n\t\"edad\" : 15,\n\t\"direccion\" : \"Universidad de los Andes\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/clientes/agregarCliente",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"clientes",
+						"agregarCliente"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un cliente con un ID ya existente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF3P2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 15,\n\t\"vinculo\" : \"HOTEL\",\n\t\"documento\" : 51798339,\n\t\"nombre\" : \"Albert Einstein\",\n\t\"edad\" : 15,\n\t\"direccion\" : \"Universidad de los Andes\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/clientes/agregarCliente",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"clientes",
+						"agregarCliente"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un cliente con un vínculo inexistente, por ejemplo, 'HOTEL'."
+			},
+			"response": []
+		},
+		{
+			"name": "RF3P3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 15,\n\t\"vinculo\" : \"PROFESOR_INVITADO\",\n\t\"documento\" : 1023956044,\n\t\"nombre\" : \"Albert Einstein\",\n\t\"edad\" : 15,\n\t\"direccion\" : \"Universidad de los Andes\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/clientes/agregarCliente",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"clientes",
+						"agregarCliente"
+					]
+				},
+				"description": "Comprobar que no puede agregarse un cliente con un documento ya existente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF3P4",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 15,\n\t\"vinculo\" : \"PROFESOR_INVITADO\",\n\t\"documento\" : 51798339,\n\t\"nombre\" : \"Albert Einstein\",\n\t\"edad\" : 15,\n\t\"direccion\" : \"Universidad de los Andes\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/clientes/agregarCliente",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"clientes",
+						"agregarCliente"
+					]
+				},
+				"description": "Agregar un cliente sin problema alguno dado que cumple con las reglas de negocio."
+			},
+			"response": []
+		},
+		{
+			"name": "RF4P1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 1,\n\t\"idCliente\": 1,\n\t\"idEspacio\": 1,\n\t\"duracion\" : 19,\n\t\"fechaInicio\": \"2020-11-19\",\n\t\"cancelado\": \"false\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/agregarReserva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"agregarReserva"
+					]
+				},
+				"description": "Comprobar que no puede agregarse una reserva con un ID ya existente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF4P2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 310,\n\t\"idCliente\": 1,\n\t\"idEspacio\": 1,\n\t\"duracion\" : 19,\n\t\"fechaInicio\": \"2018-06-19\",\n\t\"cancelado\": \"false\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/agregarReserva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"agregarReserva"
+					]
+				},
+				"description": "Comprobar que no puede agregarse una reserva en fechas donde el cliente ya tiene otras."
+			},
+			"response": []
+		},
+		{
+			"name": "RF4P3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 310,\n\t\"idCliente\": 2,\n\t\"idEspacio\": 1,\n\t\"duracion\" : 19,\n\t\"fechaInicio\": \"2018-06-04\",\n\t\"cancelado\": \"false\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/agregarReserva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"agregarReserva"
+					]
+				},
+				"description": "Comprobar que no puede agregarse una reserva en fechas donde el espacio ya tiene otras."
+			},
+			"response": []
+		},
+		{
+			"name": "RF4P4",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 310,\n\t\"idCliente\": 1,\n\t\"idEspacio\": 1,\n\t\"duracion\" : 19,\n\t\"fechaInicio\": \"2018-11-19\",\n\t\"cancelado\": \"false\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/agregarReserva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"agregarReserva"
+					]
+				},
+				"description": "Agregar una reserva sin problema alguno dado que cumple con las reglas de negocio."
+			},
+			"response": []
+		},
+		{
+			"name": "RF5P1",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 310\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/cancelarReserva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"cancelarReserva"
+					]
+				},
+				"description": "Comprobar que no se puede cancelar una reserva que no existe."
+			},
+			"response": []
+		},
+		{
+			"name": "RF5P2",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/cancelarReserva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"cancelarReserva"
+					]
+				},
+				"description": "Comprobar que no se puede cancelar una reserva que ya culminó."
+			},
+			"response": []
+		},
+		{
+			"name": "RF5P3",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 6\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/cancelarReserva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"cancelarReserva"
+					]
+				},
+				"description": "Cancelar una reserva sin problema alguno porque se cumplen todas las reglas de negocio."
+			},
+			"response": []
+		},
+		{
+			"name": "RF5P4",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 26\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/cancelarReserva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"cancelarReserva"
+					]
+				},
+				"description": "Cancelar una reserva sin problema alguno porque se cumplen todas las reglas de negocio."
+			},
+			"response": []
+		},
+		{
+			"name": "RF6P1",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 25\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/cancelarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"cancelarEspacio"
+					]
+				},
+				"description": "Comprobar que no se puede cancelar un espacio que no existe."
+			},
+			"response": []
+		},
+		{
+			"name": "RF6P2",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 2\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/cancelarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"cancelarEspacio"
+					]
+				},
+				"description": "Comprobar que no se puede cancelar un espacio que ya estaba cancelado."
+			},
+			"response": []
+		},
+		{
+			"name": "RF6P3",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/cancelarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"cancelarEspacio"
+					]
+				},
+				"description": "Comprobar que no se puede cancelar un espacio que tiene reservas vigentes."
+			},
+			"response": []
+		},
+		{
+			"name": "RF6P4",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 9\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/cancelarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"cancelarEspacio"
+					]
+				},
+				"description": "Cancelar un espacio sin problema alguno porque se cumplen todas las reglas de negocio."
+			},
+			"response": []
+		},
+		{
+			"name": "RF7P1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idCliente\" : 1,\n\t\"cantidad\" : 10,\n\t\"categoria\" : \"PROFESOR\",\n\t\"tipoHabitacion\" : \"ESTÁNDAR\",\n\t\"fechaInicio\" : \"2019-01-06\",\n\t\"duracion\" : 3,\n\t\"servicios\":[\"OTRO\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/reservaColectiva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"reservaColectiva"
+					]
+				},
+				"description": "Comprobar que no se puede realizar una reserva colectiva de un tipo de alojamiento (operador) inexistente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF7P2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idCliente\" : 15,\n\t\"cantidad\" : 10,\n\t\"categoria\" : \"HOTEL\",\n\t\"tipoHabitacion\" : \"ESTÁNDAR\",\n\t\"fechaInicio\" : \"2019-01-06\",\n\t\"duracion\" : 3,\n\t\"servicios\":[\"OTRO\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/reservaColectiva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"reservaColectiva"
+					]
+				},
+				"description": "Comprobar que no se puede realizar una reserva colectiva a un cliente que no existe."
+			},
+			"response": []
+		},
+		{
+			"name": "RF7P3",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idCliente\" : 1,\n\t\"cantidad\" : 10,\n\t\"categoria\" : \"HOTEL\",\n\t\"tipoHabitacion\" : \"FAMILIAR\",\n\t\"fechaInicio\" : \"2019-01-06\",\n\t\"duracion\" : 3,\n\t\"servicios\":[\"OTRO\"]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/reservaColectiva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"reservaColectiva"
+					]
+				},
+				"description": "Comprobar que no se puede realizar una reserva colectiva con un tipo de habitación inexistente."
+			},
+			"response": []
+		},
+		{
+			"name": "RF7P4",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idCliente\" : 1,\n\t\"cantidad\" : 10,\n\t\"categoria\" : \"HOTEL\",\n\t\"tipoHabitacion\" : \"ESTÁNDAR\",\n\t\"fechaInicio\" : \"2024-01-06\",\n\t\"duracion\" : 3,\n\t\"servicios\":[]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/reservaColectiva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"reservaColectiva"
+					]
+				},
+				"description": "Realizar una reserva colectiva sin problema alguno porque se cumplen todas las reglas de negocio."
+			},
+			"response": []
+		},
+		{
+			"name": "RF8P1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/cancelarReservaColectiva/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"cancelarReservaColectiva",
+						"0"
+					]
+				},
+				"description": "Comprobar que no se puede cancelar una reserva colectiva que no existe."
+			},
+			"response": []
+		},
+		{
+			"name": "RF8P2",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/cancelarReservaColectiva/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"cancelarReservaColectiva",
+						"1"
+					]
+				},
+				"description": "Cancelar una reserva colectiva sin problema alguno porque se cumplen todas las reglas de negocio."
+			},
+			"response": []
+		},
+		{
+			"name": "RF9P1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idEspacio\" : 25,\n\t\"fechaDeshabilitacion\" : \"2019-01-01\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/deshabilitarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"deshabilitarEspacio"
+					]
+				},
+				"description": "Comprobar que no se puede deshabilitar un espacio que no existe."
+			},
+			"response": []
+		},
+		{
+			"name": "RF9P2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idEspacio\" : 1,\n\t\"fechaDeshabilitacion\" : \"2018-01-01\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/deshabilitarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"deshabilitarEspacio"
+					]
+				},
+				"description": "Comprobar que no se puede deshabilitar un espacio con una fecha de deshabilitación anterior a la fecha actual."
+			},
+			"response": []
+		},
+		{
+			"name": "RF9P3",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idEspacio\" : 1,\n\t\"fechaDeshabilitacion\" : \"2019-01-01\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/deshabilitarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"deshabilitarEspacio"
+					]
+				},
+				"description": "Deshabilitar un espacio y traslada todas las reservas que están en él."
+			},
+			"response": []
+		},
+		{
+			"name": "RF9P4",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idEspacio\" : 7\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/deshabilitarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"deshabilitarEspacio"
+					]
+				},
+				"description": "Deshabilitar un espacio y no se trasladan todas las reservas que están en él."
+			},
+			"response": []
+		},
+		{
+			"name": "RF10P1",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/habilitarEspacio/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"habilitarEspacio",
+						"0"
+					]
+				},
+				"description": "Comprobar que no se puede habilitar un espacio que no exista."
+			},
+			"response": []
+		},
+		{
+			"name": "RF10P2",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/habilitarEspacio/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"habilitarEspacio",
+						"1"
+					]
+				},
+				"description": "Comprobar que no se puede habilitar un espacio que ya está habilitado."
+			},
+			"response": []
+		},
+		{
+			"name": "RF10P3",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/habilitarEspacio/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"habilitarEspacio",
+						"1"
+					]
+				},
+				"description": "Habilitar un espacio porque todas las reglas de negocio se cumplen."
+			},
+			"response": []
+		}
+	]
+}

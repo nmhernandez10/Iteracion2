@@ -1,0 +1,572 @@
+{
+	"info": {
+		"_postman_id": "0f552772-33ff-432b-9165-ad9cf033f445",
+		"name": "PostmanCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "RFC1",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/operadores/ingresos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"operadores",
+						"ingresos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RFC2",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/espaciosPopulares",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"espaciosPopulares"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RF6",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/cancelarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"cancelarEspacio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RF5",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 3\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/cancelarReserva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"cancelarReserva"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RF4",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 3,\n\t\"idCliente\": 1,\n\t\"idEspacio\": 2,\n\t\"duracion\" : 19,\n\t\"fechaInicio\": \"2018-11-19\",\n\t\"cancelado\": \"false\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/agregarReserva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"agregarReserva"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RFC3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/operadores/ocupaciones",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"operadores",
+						"ocupaciones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RFC4",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"fechaMenor\" : \"2018-01-02\",\n\t\"fechaMayor\" : \"2018-05-02\",\n\t\"servicios\":[]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/espaciosDisponibles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"espaciosDisponibles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RFC5",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/general/usoUsuarios",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"general",
+						"usoUsuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RFC6 CLIENTE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/general/usoUsuario/cliente/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"general",
+						"usoUsuario",
+						"cliente",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RFC6 OPERADOR",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/general/usoUsuario/operador/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"general",
+						"usoUsuario",
+						"operador",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RFC8",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/clientesFrecuentes/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"clientesFrecuentes",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RFC9",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/espaciosPocoDemandados",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"espaciosPocoDemandados"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RF3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 3,\n\t\"vinculo\" : \"PROFESOR_INVITADO\",\n\t\"documento\" : 51798339,\n\t\"nombre\" : \"Claudia Jiménez\",\n\t\"edad\" : 15,\n\t\"direccion\" : \"Universidad de los Andes\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/clientes/agregarCliente",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"clientes",
+						"agregarCliente"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RF1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 3,\n\t\"documento\" : 15780,\n\t\"categoria\" : \"VECINO\",\n\t\"nombre\" : \"Las Margaritas\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/operadores/agregarOperador",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"operadores",
+						"agregarOperador"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RF2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\" : 3,\n\t\"registro\" : 10001,\n\t\"tamaño\" : 100,\n\t\"direccion\" : \"City U APTO 203\",\n\t\"precio\" : 100000,\n\t\"fechaRetiro\": \"2020-12-12\",\n\t\"operador\" : 1,\n\t\"servicios\" : [\n\t\t{\n\t\t\t\"categoria\" : \"TV\",\n\t\t\t\"descripcion\" : \"Televisión DirectTV todos los días de la semana\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"RECEPCIÓN\",\n\t\t\t\"descripcion\" : \"Recepción en el piso más bajo del edificio del operador\",\n\t\t\t\"precioAdicional\" : 0,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"SERVICIOS_PÚBLICOS\",\n\t\t\t\"descripcion\" : \"Servicios públicos NO incluidos, con un cargo adicional\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 0,\n\t\t\t\"finHorario\":24\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"OTRO\",\n\t\t\t\"descripcion\" : \"Salón de fiestas\",\n\t\t\t\"precioAdicional\" : 25000,\n\t\t\t\"inicioHorario\" : 12,\n\t\t\t\"finHorario\": 3\n\t\t}\n\t\t],\n\t\"habitaciones\":[\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"true\",\n\t\t\t\"capacidad\" : 2\n\t\t},\n\t\t{\n\t\t\t\"categoria\" : \"ESTÁNDAR\",\n\t\t\t\"compartido\" : \"false\",\n\t\t\t\"capacidad\" : 1\n\t\t}\n\t\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/agregarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"agregarEspacio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RF7",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idCliente\" : 1,\n\t\"cantidad\" : 1,\n\t\"categoria\" : \"HOTEL\",\n\t\"tipoHabitacion\" : \"ESTÁNDAR\",\n\t\"fechaInicio\" : \"2019-01-06\",\n\t\"duracion\" : 3,\n\t\"servicios\":[]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/reservaColectiva",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"reservaColectiva"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RF9",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"idEspacio\" : 1,\n\t\"fechaDeshabilitacion\" : \"2019-01-01\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/deshabilitarEspacio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"deshabilitarEspacio"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RFC7",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"categoria\" : \"HOTEL\",\n\t\"timeUnit\" : \"DÍA\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/general/analisisOperacion",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"general",
+						"analisisOperacion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RF8",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/reservas/cancelarReservaColectiva/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"reservas",
+						"cancelarReservaColectiva",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RF10",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Proyecto/rest/espacios/habilitarEspacio/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Proyecto",
+						"rest",
+						"espacios",
+						"habilitarEspacio",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

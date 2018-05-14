@@ -40,17 +40,21 @@ public class ReservaService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response agregarReserva(Reserva reserva) {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try 
 		{
 			System.out.println(reserva.getFechaInicio());
 			System.out.println(reserva.getFechaReserva());
-			tm.addReserva(reserva, false);
+			tm.addReserva(reserva, false);	
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(reserva).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
+		
 	}
 
 	// RF5
@@ -60,10 +64,13 @@ public class ReservaService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response cancelarReserva(Reserva reserva) {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			reserva = tm.cancelarReserva(reserva, false, false);
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(reserva).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -78,10 +85,13 @@ public class ReservaService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response reservaColectiva(RF7 rf7)
 	{
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			ListaReservas reservas = new ListaReservas(tm.reservaColectiva(rf7));
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(reservas).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -94,12 +104,15 @@ public class ReservaService {
 	@Path("/cancelarReservaColectiva/" + "{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response cancelarReservaColectiva(@PathParam("id") String idS) {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			long id = Long.parseLong(idS);
 			List<String> resultado = new ArrayList<String>();
 			resultado.add(tm.cancelarReservaColectiva(id));
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(resultado).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();

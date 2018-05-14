@@ -35,11 +35,14 @@ public class ClienteService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteEspacio(RF3 rf3) {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			
 			Cliente cliente = tm.addCliente(rf3);
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(cliente).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();

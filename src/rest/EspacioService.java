@@ -48,11 +48,14 @@ public class EspacioService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteEspacio(RF2 rf2) {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			
 			Espacio espacio = tm.addEspacio(rf2);
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(espacio).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -65,10 +68,13 @@ public class EspacioService {
 	@Path("/espaciosPopulares")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response espaciosPopulares() {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			ListaEspacios espacios = new ListaEspacios(tm.espaciosPopulares());
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(espacios).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -82,10 +88,13 @@ public class EspacioService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response espaciosDisponibles(RFC4 rfc4) {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {			
 			List<Espacio> espacios = tm.espaciosDisponibles(rfc4);
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(espacios).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -99,11 +108,13 @@ public class EspacioService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteEspacio(Espacio espacio) {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
-			
 			espacio = tm.cancelarEspacio(espacio, espacio.getFechaRetiroDate(), false);
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(espacio).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -117,11 +128,14 @@ public class EspacioService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response clientesFrecuentes(@PathParam("id") String idE) 
 	{
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 
 			ListaRFC8 clientes = tm.clientesFrecuentes(Long.parseLong(idE));
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(clientes).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -135,11 +149,14 @@ public class EspacioService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response espaciosPocoDemandados() 
 	{
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 
 			ListaRFC9 espacios = tm.espaciosPocoDemandados();
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(espacios).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -152,11 +169,14 @@ public class EspacioService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deshabilitarEspacio(RF9 rf9)
 	{
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 
 			List<String> resultados = tm.deshabilitarEspacio(rf9);
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(resultados).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -168,12 +188,15 @@ public class EspacioService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response habilitarEspacio(@PathParam("id") String idS)
 	{
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			Long id = Long.parseLong(idS);
 			List<String> resultados = new ArrayList<String>();
 			resultados.add(tm.habilitarEspacio(id));
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(resultados).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();

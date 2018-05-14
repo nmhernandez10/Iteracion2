@@ -40,11 +40,14 @@ public class OperadorService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteEspacio(RF1 rf1) {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			
 			Operador operador = tm.addOperador(rf1);
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(operador).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -55,11 +58,14 @@ public class OperadorService {
 	@GET
 	@Path("/ingresos")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response getBoletas() {
+	public Response getIngresos() {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			ListaRFC1 ingresos = new ListaRFC1(tm.ingresosOperadores());
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(ingresos).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
@@ -72,10 +78,13 @@ public class OperadorService {
 	@Path("/ocupaciones")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response ocupacionOperadores() {
+		long tiempo = System.currentTimeMillis();
 		AlohAndesTransactionManager tm = new AlohAndesTransactionManager(getPath());
 
 		try {
 			ListaRFC3 ocupaciones = new ListaRFC3(tm.ocupacionOperadores());
+			tiempo = System.currentTimeMillis() - tiempo;
+			System.out.println("Esta transacción/consulta duró " + tiempo + " milisegundos");
 			return Response.status(200).entity(ocupaciones).build();
 		} catch (Exception e) {
 			return Response.status(500).entity(doErrorMessage(e)).build();
